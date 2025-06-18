@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme-toggle" // Import the new component
 
-const API_BASE_URL = "http://localhost:8000"
+const API_BASE_URL = "https://www.closetmind.studio"
 
 const navItems = [
   { href: "/dashboard/chat", label: "AI Chat", icon: MessageSquare },
