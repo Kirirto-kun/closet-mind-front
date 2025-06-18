@@ -6,6 +6,7 @@ import { MessageSquare, Shirt, ListChecks, LogOut, Download, Bot } from "lucide-
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
+import { ThemeToggle } from "@/components/theme-toggle" // Import the new component
 
 const API_BASE_URL = "https://www.closetmind.studio"
 
@@ -60,14 +61,17 @@ export default function Sidebar() {
           <Download className="mr-3 h-5 w-5" />
           Download Extension
         </Button>
-        <Button
-          variant="ghost"
-          className="w-full justify-start text-muted-foreground hover:text-accent-foreground"
-          onClick={handleLogout}
-        >
-          <LogOut className="mr-3 h-5 w-5" />
-          Log Out
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-muted-foreground hover:text-accent-foreground"
+            onClick={handleLogout}
+          >
+            <LogOut className="mr-3 h-5 w-5" />
+            Log Out
+          </Button>
+          <ThemeToggle /> {/* Add the theme toggle here */}
+        </div>
         {user && (
           <p className="text-xs text-muted-foreground text-center mt-2">Logged in as {user.username || user.email}</p>
         )}

@@ -1,10 +1,10 @@
 "use client"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { PlusCircle, Loader2, AlertTriangle, ImagePlus, Link2, ListChecks } from "lucide-react"
+import { Loader2, AlertTriangle, ImageUp, ListChecks } from "lucide-react" // Changed PlusCircle to ImageUp for consistency
 import { apiCall } from "@/lib/api"
 import type { WaitListItemResponse } from "@/lib/types"
-import AddWaitlistItemDialog from "@/components/dashboard/waitlist/add-url-dialog"
+// AddWaitlistItemDialog is removed
 import UploadScreenshotDialog from "@/components/dashboard/waitlist/upload-screenshot-dialog"
 import WaitlistItemCard from "@/components/dashboard/waitlist/waitlist-item-card"
 
@@ -12,7 +12,7 @@ export default function WaitlistPage() {
   const [items, setItems] = useState<WaitListItemResponse[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [isAddUrlDialogOpen, setIsAddUrlDialogOpen] = useState(false)
+  // isAddUrlDialogOpen is removed
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false)
 
   const fetchItems = async () => {
@@ -42,11 +42,9 @@ export default function WaitlistPage() {
       <div className="flex flex-wrap justify-between items-center gap-4">
         <h2 className="text-3xl font-semibold tracking-tight">My Waitlist</h2>
         <div className="flex gap-2">
-          <Button onClick={() => setIsAddUrlDialogOpen(true)} variant="outline">
-            <Link2 className="mr-2 h-5 w-5" /> Add by URL
-          </Button>
+          {/* "Add by URL" button removed */}
           <Button onClick={() => setIsUploadDialogOpen(true)}>
-            <ImagePlus className="mr-2 h-5 w-5" /> Upload Screenshot
+            <ImageUp className="mr-2 h-5 w-5" /> Upload Screenshot
           </Button>
         </div>
       </div>
@@ -72,9 +70,9 @@ export default function WaitlistPage() {
         <div className="flex flex-col items-center justify-center text-center py-10 border-2 border-dashed border-border rounded-lg">
           <ListChecks className="h-16 w-16 text-muted-foreground mb-4" />
           <h3 className="text-xl font-semibold text-muted-foreground">Your waitlist is empty!</h3>
-          <p className="text-muted-foreground mt-1">Add items you want to buy or ideas you love.</p>
-          <Button onClick={() => setIsAddUrlDialogOpen(true)} className="mt-6">
-            <PlusCircle className="mr-2 h-5 w-5" /> Add First Item
+          <p className="text-muted-foreground mt-1">Add items you want by uploading a screenshot.</p>
+          <Button onClick={() => setIsUploadDialogOpen(true)} className="mt-6">
+            <ImageUp className="mr-2 h-5 w-5" /> Upload First Screenshot
           </Button>
         </div>
       )}
@@ -87,11 +85,7 @@ export default function WaitlistPage() {
         </div>
       )}
 
-      <AddWaitlistItemDialog
-        isOpen={isAddUrlDialogOpen}
-        onOpenChange={setIsAddUrlDialogOpen}
-        onItemAdded={handleItemAdded}
-      />
+      {/* AddWaitlistItemDialog removed */}
       <UploadScreenshotDialog
         isOpen={isUploadDialogOpen}
         onOpenChange={setIsUploadDialogOpen}

@@ -2,7 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeProvider } from "@/components/theme-provider" // Ensure this path is correct
 import { AuthProvider } from "@/contexts/auth-context"
 import { Toaster } from "sonner"
 
@@ -22,7 +22,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark" // You can change this to "system" if preferred
+          enableSystem={true} // Explicitly true
+          disableTransitionOnChange
+          storageKey="closetmind-theme" // Using a specific storage key
+        >
           <AuthProvider>
             {children}
             <Toaster />

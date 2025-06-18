@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import type React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -10,123 +10,213 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea" // For features
-import { Loader2 } from "lucide-react"
+import { Loader2, UploadCloud, XCircle, Camera } from "lucide-react"
 import { apiCall } from "@/lib/api"
-import type { ClothingItemCreate } from "@/lib/types"
+import type { PhotoUpload, ClothingItemResponse } from "@/lib/types"
 import { toast } from "sonner"
+import Image from "next/image"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 interface AddWardrobeItemDialogProps {
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
-  onItemAdded: () => void
+  onItemAdded: () => void // Callback after items are successfully added
+}
+
+interface ImagePreview {
+  id: string
+  file: File
+  base64: string
 }
 
 export default function AddWardrobeItemDialog({ isOpen, onOpenChange, onItemAdded }: AddWardrobeItemDialogProps) {
-  const [name, setName] = useState("")
-  const [imageUrl, setImageUrl] = useState("")
-  const [features, setFeatures] = useState("") // Store as JSON string
+  const [selectedImages, setSelectedImages] = useState<ImagePreview[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (files) {
+      const newImagePreviews: ImagePreview[] = []
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        if (file.type.startsWith("image/")) {
+          try {
+            const base64 = await convertFileToBase64(file)
+            newImagePreviews.push({ id: `${file.name}-${Date.now()}-${i}`, file, base64 })
+          } catch (error) {
+            toast.error(`Failed to read file: ${file.name}`)
+            console.error("File read error:", error)
+          }
+        } else {
+          toast.warning(`Skipped non-image file: ${file.name}`)
+        }
+      }
+      setSelectedImages((prev) => [...prev, ...newImagePreviews])
+    }
+    // Reset file input to allow selecting the same file again if removed
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
+
+  const convertFileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = (error) => reject(error)
+    })
+  }
+
+  const removeImage = (id: string) => {
+    setSelectedImages((prev) => prev.filter((img) => img.id !== id))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (selectedImages.length === 0) {
+      toast.error("Please select at least one image to upload.")
+      return
+    }
     setIsSubmitting(true)
 
-    let parsedFeatures: Record<string, any> | undefined
-    if (features.trim()) {
-      try {
-        parsedFeatures = JSON.parse(features)
-      } catch (error) {
-        toast.error('Invalid JSON format for features. Example: {"color": "red", "season": "summer"}')
-        setIsSubmitting(false)
-        return
-      }
-    }
-
-    const newItem: ClothingItemCreate = {
-      name,
-      image_url: imageUrl,
-      ...(parsedFeatures && { features: parsedFeatures }),
-    }
+    const photosToUpload: PhotoUpload[] = selectedImages.map((img) => ({
+      image_base64: img.base64,
+      // filename: img.file.name // You might want to send filename if backend supports it
+    }))
 
     try {
-      await apiCall("/wardrobe/items", {
+      // The API expects an array of PhotoUpload objects directly in the body
+      // The key "items" is used if the schema is `{"items": PhotoUpload[]}`
+      // Based on your spec: `requestBody: {"content":{"application/json":{"schema":{"items":{...}, "type":"array"}}}}`
+      // This implies the root of the JSON body should be the array itself.
+      await apiCall<ClothingItemResponse[]>("/wardrobe/items", {
         method: "POST",
-        body: JSON.stringify(newItem),
+        body: JSON.stringify(photosToUpload), // Send the array directly
       })
-      toast.success("Item added to wardrobe!")
+      toast.success(`${selectedImages.length} item(s) added to wardrobe!`)
       onItemAdded()
-      onOpenChange(false) // Close dialog
-      // Reset form
-      setName("")
-      setImageUrl("")
-      setFeatures("")
+      resetDialogState()
+      onOpenChange(false)
     } catch (error) {
-      console.error("Failed to add item:", error)
+      console.error("Failed to add items:", error)
       // Error toast is handled by apiCall
     } finally {
       setIsSubmitting(false)
     }
   }
 
+  const resetDialogState = () => {
+    setSelectedImages([])
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
+
+  const handleDialogClose = (open: boolean) => {
+    if (!open) {
+      resetDialogState()
+    }
+    onOpenChange(open)
+  }
+
+  // Placeholder for camera functionality
+  const handleOpenCamera = () => {
+    toast.info("Camera functionality coming soon!")
+    // Implementation would involve navigator.mediaDevices.getUserMedia
+  }
+
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+    <Dialog open={isOpen} onOpenChange={handleDialogClose}>
+      <DialogContent className="sm:max-w-lg md:max-w-xl lg:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Add New Wardrobe Item</DialogTitle>
+          <DialogTitle>Upload Clothing Photos</DialogTitle>
           <DialogDescription>
-            Enter the details of your clothing item. You can add features like color, season, etc., as a JSON object.
+            Select one or more photos of your clothing items. The AI will process them.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div>
-            <Label htmlFor="name" className="text-right">
-              Name
+            <Label htmlFor="wardrobePhotos" className="block mb-2 font-medium">
+              Select Photos
             </Label>
-            <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required disabled={isSubmitting} />
-          </div>
-          <div>
-            <Label htmlFor="imageUrl" className="text-right">
-              Image URL
-            </Label>
-            <Input
-              id="imageUrl"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              required
-              disabled={isSubmitting}
-              placeholder="https://example.com/image.jpg"
-            />
-          </div>
-          <div>
-            <Label htmlFor="features" className="text-right">
-              Features (JSON format)
-            </Label>
-            <Textarea
-              id="features"
-              value={features}
-              onChange={(e) => setFeatures(e.target.value)}
-              placeholder='e.g., {"color": "blue", "material": "cotton"}'
-              disabled={isSubmitting}
-              rows={3}
-            />
-            <p className="text-xs text-muted-foreground mt-1">
-              Optional. Example: {"{'color': 'red', 'season': 'summer'}"}
-            </p>
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button type="button" variant="outline" disabled={isSubmitting}>
-                Cancel
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => fileInputRef.current?.click()}
+                className="flex-1"
+                disabled={isSubmitting}
+              >
+                <UploadCloud className="mr-2 h-4 w-4" /> Choose Files
               </Button>
-            </DialogClose>
-            <Button type="submit" disabled={isSubmitting}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleOpenCamera}
+                className="flex-1"
+                disabled={isSubmitting}
+              >
+                <Camera className="mr-2 h-4 w-4" /> Use Camera
+              </Button>
+            </div>
+            <Input
+              id="wardrobePhotos"
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleFileChange}
+              ref={fileInputRef}
+              className="hidden" // Hide the default input, trigger via button
+              disabled={isSubmitting}
+            />
+          </div>
+
+          {selectedImages.length > 0 && (
+            <div>
+              <Label className="block mb-2 font-medium">Selected Images ({selectedImages.length})</Label>
+              <ScrollArea className="h-48 w-full rounded-md border border-border p-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                  {selectedImages.map((imgPreview) => (
+                    <div key={imgPreview.id} className="relative group aspect-square">
+                      <Image
+                        src={imgPreview.base64 || "/placeholder.svg"}
+                        alt={imgPreview.file.name}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-md"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => removeImage(imgPreview.id)}
+                        disabled={isSubmitting}
+                      >
+                        <XCircle className="h-4 w-4" />
+                        <span className="sr-only">Remove {imgPreview.file.name}</span>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+                <ScrollBar orientation="vertical" />
+              </ScrollArea>
+            </div>
+          )}
+
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={() => handleDialogClose(false)} disabled={isSubmitting}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isSubmitting || selectedImages.length === 0}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Add Item
+              Upload {selectedImages.length > 0 ? `${selectedImages.length} Image(s)` : ""}
             </Button>
           </DialogFooter>
         </form>
