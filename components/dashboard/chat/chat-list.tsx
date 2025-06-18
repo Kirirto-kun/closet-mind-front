@@ -17,7 +17,7 @@ interface ChatListProps {
   onDeleteChat: (chatId: number) => Promise<boolean>
   isLoadingChats: boolean
   isCreatingChat: boolean
-  isDeletingChat: Set<number> // Set of chat IDs currently being deleted
+  isDeletingChat: Set<number>
 }
 
 export default function ChatList({
@@ -42,12 +42,12 @@ export default function ChatList({
     if (createdChat) {
       setNewChatTitle("")
       setIsCreateDialogOpen(false)
-      onSelectChat(createdChat.id) // Automatically select the new chat
+      onSelectChat(createdChat.id)
     }
   }
 
   const handleDelete = async (chatId: number, e: React.MouseEvent) => {
-    e.stopPropagation() // Prevent chat selection when clicking delete
+    e.stopPropagation()
     const confirmed = window.confirm("Are you sure you want to delete this chat and all its messages?")
     if (confirmed) {
       await onDeleteChat(chatId)
@@ -56,61 +56,72 @@ export default function ChatList({
 
   return (
     <div className="w-full md:w-72 lg:w-80 border-r border-border flex flex-col bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/30 h-full">
-      <div className="p-4 border-b border-border flex justify-between items-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <h2 className="text-lg font-semibold">Разговоры</h2>
+      <div className="p-3 md:p-4 border-b border-border flex justify-between items-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <h2 className="text-base md:text-lg font-semibold">Разговоры</h2>
         <Button 
           size="icon" 
           variant="ghost" 
           onClick={() => setIsCreateDialogOpen(true)} 
           disabled={isCreatingChat}
-          className="hover:bg-primary/10 hover:text-primary transition-colors"
+          className="hover:bg-primary/10 hover:text-primary transition-colors h-8 w-8 md:h-10 md:w-10"
         >
-          {isCreatingChat ? <Loader2 className="h-5 w-5 animate-spin" /> : <PlusCircle className="h-5 w-5" />}
+          {isCreatingChat ? (
+            <Loader2 className="h-4 w-4 md:h-5 md:w-5 animate-spin" />
+          ) : (
+            <PlusCircle className="h-4 w-4 md:h-5 md:w-5" />
+          )}
           <span className="sr-only">Новый чат</span>
         </Button>
       </div>
+
       <ScrollArea className="flex-1">
         {isLoadingChats && (
           <div className="p-4 text-center text-muted-foreground">
-            <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2" />
-            Загружаю чаты...
+            <Loader2 className="h-5 w-5 md:h-6 md:w-6 animate-spin mx-auto mb-2" />
+            <p className="text-sm">Загружаю чаты...</p>
           </div>
         )}
+
         {!isLoadingChats && chats.length === 0 && (
           <div className="p-4 text-center text-muted-foreground space-y-3">
-            <div className="p-3 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 w-fit mx-auto">
-              <MessageSquare className="h-6 w-6 text-primary" />
+            <div className="p-2 md:p-3 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 w-fit mx-auto">
+              <MessageSquare className="h-5 w-5 md:h-6 md:w-6 text-primary" />
             </div>
             <div>
-              <p className="mb-2">Пока нет разговоров</p>
-              <Button variant="link" className="p-0 h-auto text-primary" onClick={() => setIsCreateDialogOpen(true)}>
+              <p className="mb-2 text-sm">Пока нет разговоров</p>
+              <Button 
+                variant="link" 
+                className="p-0 h-auto text-primary text-sm" 
+                onClick={() => setIsCreateDialogOpen(true)}
+              >
                 Создайте первый чат!
               </Button>
             </div>
           </div>
         )}
+
         {!isLoadingChats && chats.length > 0 && (
           <div className="p-2 space-y-1">
             {chats.map((chat) => (
               <Button
                 key={chat.id}
                 variant={selectedChatId === chat.id ? "secondary" : "ghost"}
-                className="w-full justify-start h-auto py-2 px-3 group"
+                className="w-full justify-start h-auto py-2 md:py-3 px-2 md:px-3 group text-left"
                 onClick={() => onSelectChat(chat.id)}
               >
                 <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span className="truncate flex-1 text-left">{chat.title}</span>
+                <span className="truncate flex-1 text-sm md:text-base">{chat.title}</span>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-7 w-7 ml-2 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                  className="h-6 w-6 md:h-7 md:w-7 ml-2 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
                   onClick={(e) => handleDelete(chat.id, e)}
                   disabled={isDeletingChat.has(chat.id)}
                 >
                   {isDeletingChat.has(chat.id) ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="h-3 w-3 md:h-4 md:w-4 animate-spin" />
                   ) : (
-                    <Trash2 className="h-4 w-4 text-destructive" />
+                    <Trash2 className="h-3 w-3 md:h-4 md:w-4 text-destructive" />
                   )}
                   <span className="sr-only">Delete Chat</span>
                 </Button>
@@ -121,9 +132,9 @@ export default function ChatList({
       </ScrollArea>
 
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent>
+        <DialogContent className="w-[95vw] max-w-md">
           <DialogHeader>
-            <DialogTitle>Создать новый чат</DialogTitle>
+            <DialogTitle className="text-lg">Создать новый чат</DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <Input
@@ -131,15 +142,20 @@ export default function ChatList({
               value={newChatTitle}
               onChange={(e) => setNewChatTitle(e.target.value)}
               disabled={isCreatingChat}
+              className="h-12 text-base"
             />
           </div>
-          <DialogFooter>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
             <DialogClose asChild>
-              <Button variant="outline" disabled={isCreatingChat}>
+              <Button variant="outline" disabled={isCreatingChat} className="w-full sm:w-auto">
                 Отмена
               </Button>
             </DialogClose>
-            <Button onClick={handleCreateChat} disabled={isCreatingChat || !newChatTitle.trim()}>
+            <Button 
+              onClick={handleCreateChat} 
+              disabled={isCreatingChat || !newChatTitle.trim()}
+              className="w-full sm:w-auto"
+            >
               {isCreatingChat && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Создать чат
             </Button>

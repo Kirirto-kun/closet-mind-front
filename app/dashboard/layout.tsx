@@ -4,9 +4,8 @@ import type React from "react"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
-import Sidebar from "@/components/dashboard/sidebar"
 import { Loader2 } from "lucide-react"
-import Link from "next/link"
+import { MobileHeader } from "@/components/ui/mobile-header"
 
 export default function DashboardLayout({
   children,
@@ -31,17 +30,31 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen bg-background text-foreground">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto p-6 md:p-8">
-        <nav className="mb-4 flex gap-4">
-          <Link href="/dashboard/wardrobe">Гардероб</Link>
-          <Link href="/dashboard/chat">Чат</Link>
-          <Link href="/dashboard/waitlist">Waitlist</Link>
-          <Link href="/dashboard/tryon">Try-On</Link>
-        </nav>
-        {children}
-      </main>
+    <div className="min-h-screen bg-background">
+      {/* Mobile Header */}
+      <div className="md:hidden">
+        <MobileHeader />
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:flex h-screen bg-background text-foreground">
+        {/* Desktop Sidebar - keep existing sidebar for desktop */}
+        <aside className="w-64 bg-card p-4 flex flex-col border-r border-border">
+          {/* Existing sidebar content */}
+        </aside>
+        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+          {children}
+        </main>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="md:hidden">
+        <main className="pt-14 min-h-[calc(100vh-3.5rem)]">
+          <div className="p-4">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   )
 }

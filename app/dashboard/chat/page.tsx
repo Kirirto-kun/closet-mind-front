@@ -17,6 +17,7 @@ export default function ChatPage() {
   const [chats, setChats] = useState<Chat[]>([])
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null)
   const [messages, setMessages] = useState<UIMessage[]>([])
+  const [showChatList, setShowChatList] = useState(true)
 
   const [isLoadingChats, setIsLoadingChats] = useState(true)
   const [isCreatingChat, setIsCreatingChat] = useState(false)
@@ -54,6 +55,7 @@ export default function ChatPage() {
       }
 
       setSelectedChat(chat)
+      setShowChatList(false) // Hide chat list on mobile when chat is selected
       setIsLoadingMessages(true)
       setMessages([])
       try {
@@ -73,6 +75,7 @@ export default function ChatPage() {
         toast.error(`Failed to load messages for "${chat.title}".`)
         console.error(`Fetch messages error for chat ${chatId}:`, error)
         setSelectedChat(null)
+        setShowChatList(true)
       } finally {
         setIsLoadingMessages(false)
       }
@@ -118,6 +121,7 @@ export default function ChatPage() {
       if (selectedChat?.id === chatId) {
         setSelectedChat(null)
         setMessages([])
+        setShowChatList(true) // Show chat list when current chat is deleted
       }
       toast.success("Chat deleted successfully.")
       return true
@@ -168,12 +172,7 @@ export default function ChatPage() {
       }
 
       setMessages((prevMessages) => {
-        // Remove optimistic message and add the confirmed user message (if API returned it) and assistant message
-        // For simplicity, if your POST /messages doesn't return the user message, we keep the optimistic one.
-        // And add the new assistant message.
         const updatedMessages = prevMessages.filter((m) => m.id !== optimisticUserMessage.id)
-        // Assuming the user message is implicitly confirmed by the assistant's response.
-        // If your API returns the created user message as well, you'd use that.
         return [...updatedMessages, optimisticUserMessage, newAssistantMessage].sort(
           (a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime(),
         )
@@ -190,14 +189,8 @@ export default function ChatPage() {
           ),
       )
     } catch (error) {
-      // The error is already logged by apiCall
-      // toast.error("Send message error: Failed to fetch"); // This was the original error, apiCall now handles more specific toasting
-      console.error(`Send message error for chat ${chatId}:`, error) // Additional context
-
-      // Revert optimistic update
+      console.error(`Send message error for chat ${chatId}:`, error)
       setMessages((prev) => prev.filter((m) => m.id !== optimisticUserMessage.id))
-      // It might be good to restore the input field with messageContent here if input state was managed in this component
-      // For now, ChatMessageArea clears its own input.
     } finally {
       setIsSendingMessage(false)
     }
@@ -205,7 +198,6 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (!selectedChat && chats.length > 0 && !isLoadingChats && !isLoadingMessages) {
-      // Check if the first chat is already selected to prevent infinite loop if selection fails
       if (chats[0] && selectedChat?.id !== chats[0].id) {
         handleSelectChat(chats[0].id)
       }
@@ -213,24 +205,71 @@ export default function ChatPage() {
   }, [chats, selectedChat, isLoadingChats, isLoadingMessages, handleSelectChat])
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] border border-border rounded-lg shadow-xl overflow-hidden">
-      <ChatList
-        chats={chats}
-        selectedChatId={selectedChat?.id || null}
-        onSelectChat={handleSelectChat}
-        onCreateChat={handleCreateChat}
-        onDeleteChat={handleDeleteChat}
-        isLoadingChats={isLoadingChats}
-        isCreatingChat={isCreatingChat}
-        isDeletingChat={isDeletingChat}
-      />
-      <ChatMessageArea
-        selectedChat={selectedChat}
-        messages={messages}
-        onSendMessage={handleSendMessage}
-        isLoadingMessages={isLoadingMessages}
-        isSendingMessage={isSendingMessage}
-      />
-    </div>
+    <>
+      {/* Mobile Layout */}
+      <div className="md:hidden h-[calc(100vh-3.5rem)]">
+        {showChatList ? (
+          <div className="h-full">
+            <ChatList
+              chats={chats}
+              selectedChatId={selectedChat?.id || null}
+              onSelectChat={handleSelectChat}
+              onCreateChat={handleCreateChat}
+              onDeleteChat={handleDeleteChat}
+              isLoadingChats={isLoadingChats}
+              isCreatingChat={isCreatingChat}
+              isDeletingChat={isDeletingChat}
+            />
+          </div>
+        ) : (
+          <div className="h-full flex flex-col">
+            {/* Mobile chat header with back button */}
+            <div className="flex items-center p-3 border-b bg-background">
+              <button
+                onClick={() => setShowChatList(true)}
+                className="mr-3 p-1 hover:bg-muted rounded"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <h1 className="text-lg font-semibold truncate">
+                {selectedChat?.title || "Chat"}
+              </h1>
+            </div>
+            <div className="flex-1">
+              <ChatMessageArea
+                selectedChat={selectedChat}
+                messages={messages}
+                onSendMessage={handleSendMessage}
+                isLoadingMessages={isLoadingMessages}
+                isSendingMessage={isSendingMessage}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:flex h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem)] border border-border rounded-lg shadow-xl overflow-hidden">
+        <ChatList
+          chats={chats}
+          selectedChatId={selectedChat?.id || null}
+          onSelectChat={handleSelectChat}
+          onCreateChat={handleCreateChat}
+          onDeleteChat={handleDeleteChat}
+          isLoadingChats={isLoadingChats}
+          isCreatingChat={isCreatingChat}
+          isDeletingChat={isDeletingChat}
+        />
+        <ChatMessageArea
+          selectedChat={selectedChat}
+          messages={messages}
+          onSendMessage={handleSendMessage}
+          isLoadingMessages={isLoadingMessages}
+          isSendingMessage={isSendingMessage}
+        />
+      </div>
+    </>
   )
 }

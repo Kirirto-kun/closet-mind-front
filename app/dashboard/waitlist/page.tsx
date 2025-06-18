@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function WaitlistPage() {
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">Virtual Try-On Waitlist</h1>
+    <div className="space-y-4 md:space-y-6">
+      <h1 className="text-2xl md:text-3xl font-bold">Virtual Try-On Waitlist</h1>
       <WaitlistContainer />
     </div>
   )

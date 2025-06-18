@@ -33,29 +33,35 @@ export default function WaitlistContainer() {
   }, [])
 
   const handleItemAdded = () => {
-    fetchItems() // Refresh list after adding new item
+    fetchItems()
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap justify-between items-center gap-4">
-        <h2 className="text-2xl font-semibold tracking-tight">My Items</h2>
-        <Button onClick={() => setIsUploadDialogOpen(true)}>
-          <ImageUp className="mr-2 h-5 w-5" /> Upload Screenshot
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-xl md:text-2xl font-semibold tracking-tight">My Items</h2>
+        <Button 
+          onClick={() => setIsUploadDialogOpen(true)}
+          className="w-full sm:w-auto h-11 md:h-10"
+        >
+          <ImageUp className="mr-2 h-4 w-4 md:h-5 md:w-5" /> 
+          Upload Screenshot
         </Button>
       </div>
 
       {isLoading && (
-        <div className="flex justify-center items-center py-10">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
-          <p className="ml-3 text-lg">Loading your waitlist...</p>
+        <div className="flex justify-center items-center py-12 md:py-16">
+          <div className="text-center">
+            <Loader2 className="h-10 w-10 md:h-12 md:w-12 animate-spin text-primary mx-auto mb-3" />
+            <p className="text-base md:text-lg">Loading your waitlist...</p>
+          </div>
         </div>
       )}
 
       {!isLoading && error && (
-        <div className="flex flex-col items-center justify-center text-destructive bg-destructive/10 p-6 rounded-md">
-          <AlertTriangle className="h-10 w-10 mb-2" />
-          <p className="text-lg font-medium">{error}</p>
+        <div className="flex flex-col items-center justify-center text-destructive bg-destructive/10 p-6 md:p-8 rounded-md">
+          <AlertTriangle className="h-8 w-8 md:h-10 md:w-10 mb-2" />
+          <p className="text-base md:text-lg font-medium text-center">{error}</p>
           <Button onClick={fetchItems} variant="outline" className="mt-4">
             Try Again
           </Button>
@@ -63,18 +69,22 @@ export default function WaitlistContainer() {
       )}
 
       {!isLoading && !error && items.length === 0 && (
-        <div className="flex flex-col items-center justify-center text-center py-10 border-2 border-dashed border-border rounded-lg">
-          <ListChecks className="h-16 w-16 text-muted-foreground mb-4" />
-          <h3 className="text-xl font-semibold text-muted-foreground">Your waitlist is empty!</h3>
-          <p className="text-muted-foreground mt-1">Add items you want by uploading a screenshot.</p>
-          <Button onClick={() => setIsUploadDialogOpen(true)} className="mt-6">
-            <ImageUp className="mr-2 h-5 w-5" /> Upload First Screenshot
+        <div className="flex flex-col items-center justify-center text-center py-12 md:py-16 border-2 border-dashed border-border rounded-lg">
+          <ListChecks className="h-12 w-12 md:h-16 md:w-16 text-muted-foreground mb-4" />
+          <h3 className="text-lg md:text-xl font-semibold text-muted-foreground">Your waitlist is empty!</h3>
+          <p className="text-muted-foreground mt-1 mb-6">Add items you want by uploading a screenshot.</p>
+          <Button 
+            onClick={() => setIsUploadDialogOpen(true)} 
+            className="w-full sm:w-auto"
+          >
+            <ImageUp className="mr-2 h-4 w-4 md:h-5 md:w-5" /> 
+            Upload First Screenshot
           </Button>
         </div>
       )}
 
       {!isLoading && !error && items.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
           {items.map((item) => (
             <WaitlistItemCard key={item.id} item={item} onTryOnComplete={fetchItems} />
           ))}
@@ -88,4 +98,4 @@ export default function WaitlistContainer() {
       />
     </div>
   )
-} 
+}
