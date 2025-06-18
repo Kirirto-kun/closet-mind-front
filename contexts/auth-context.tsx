@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       const data: Token = await response.json()
-      Cookies.set("authToken", data.access_token, { expires: 7, secure: process.env.NODE_ENV === "production" })
+      Cookies.set("authToken", data.access_token, { expires: 365, secure: process.env.NODE_ENV === "production" })
       setToken(data.access_token)
 
       // Assuming you need to fetch user details separately or they are part of a different flow
@@ -163,7 +163,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       const data: Token = await response.json()
-      Cookies.set("authToken", data.access_token, { expires: 7, secure: process.env.NODE_ENV === "production" })
+      Cookies.set("authToken", data.access_token, { expires: 365, secure: process.env.NODE_ENV === "production" })
       setToken(data.access_token)
       toast.success("Google login successful!")
       setIsLoading(false)

@@ -14,6 +14,7 @@ const API_BASE_URL = "https://www.closetmind.studio"
 
 const navItems = [
   { href: "/dashboard/chat", label: "AI Chat", icon: MessageSquare },
+  { href: "/dashboard/tryon", label: "Try On", icon: Shirt },
   { href: "/dashboard/wardrobe", label: "My Wardrobe", icon: Shirt },
   { href: "/dashboard/waitlist", label: "My Waitlist", icon: ListChecks },
 ]

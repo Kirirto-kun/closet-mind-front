@@ -12,6 +12,7 @@ const API_BASE_URL = "https://www.closetmind.studio"
 
 const navItems = [
   { href: "/dashboard/chat", label: "AI Chat", icon: MessageSquare },
+  { href: "/dashboard/tryon", label: "Try On", icon: Shirt },
   { href: "/dashboard/wardrobe", label: "My Wardrobe", icon: Shirt },
   { href: "/dashboard/waitlist", label: "My Waitlist", icon: ListChecks },
 ]
@@ -31,10 +32,10 @@ export default function Sidebar() {
 
   return (
     <aside className="w-64 bg-card p-4 flex flex-col border-r border-border">
-      <div className="mb-8 flex items-center space-x-2">
+      <Link href="/dashboard" className="mb-8 flex items-center space-x-2 hover:opacity-80 transition-opacity">
         <Bot className="h-8 w-8 text-primary" />
         <h1 className="text-2xl font-semibold">ClosetMind</h1>
-      </div>
+      </Link>
       <nav className="flex-grow space-y-2">
         {navItems.map((item) => (
           <Link

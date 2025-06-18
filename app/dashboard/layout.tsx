@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { Loader2 } from "lucide-react"
 import { MobileHeader } from "@/components/ui/mobile-header"
+import Sidebar from "@/components/dashboard/sidebar"
 
 export default function DashboardLayout({
   children,
@@ -38,10 +39,8 @@ export default function DashboardLayout({
 
       {/* Desktop Layout */}
       <div className="hidden md:flex h-screen bg-background text-foreground">
-        {/* Desktop Sidebar - keep existing sidebar for desktop */}
-        <aside className="w-64 bg-card p-4 flex flex-col border-r border-border">
-          {/* Existing sidebar content */}
-        </aside>
+        {/* Desktop Sidebar */}
+        <Sidebar />
         <main className="flex-1 overflow-y-auto p-6 md:p-8">
           {children}
         </main>
