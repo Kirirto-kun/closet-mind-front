@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
-const API_BASE_URL = "https://www.closetmind.studio"; // Такой же URL как в auth-context
+const API_BASE_URL = "https://www.closetmind.studio";
 
 interface TryOn {
   id: number;
@@ -56,34 +56,26 @@ export default function TryOnPage() {
     }
   };
 
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!clothingFile || !humanFile || !token) return;
     setLoading(true);
     setError(null);
+
     try {
-      const clothingBase64 = await fileToBase64(clothingFile);
-      const humanBase64 = await fileToBase64(humanFile);
+      const formData = new FormData();
+      formData.append("clothing_image", clothingFile);
+      formData.append("human_image", humanFile);
+
       const res = await fetch(`${API_BASE_URL}/tryon/`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
+          // Не указываем Content-Type, браузер сам установит правильный с boundary для multipart/form-data
         },
-        body: JSON.stringify({
-          clothing_image_base64: clothingBase64,
-          human_image_base64: humanBase64,
-        }),
+        body: formData,
       });
+
       if (!res.ok) throw new Error("Ошибка создания try-on");
       await fetchTryons(token);
       setClothingFile(null);
@@ -156,4 +148,4 @@ export default function TryOnPage() {
       </Dialog>
     </div>
   );
-} 
+}
