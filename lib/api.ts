@@ -1,7 +1,7 @@
 import Cookies from "js-cookie"
 import { toast } from "sonner"
 
-const API_BASE_URL = "https://www.closetmind.studio"
+const API_BASE_URL = "http://localhost:8000"
 
 interface ApiCallOptions extends RequestInit {
   isFormData?: boolean
@@ -70,4 +70,65 @@ export async function apiCall<T>(endpoint: string, options: ApiCallOptions = {})
     }
     throw error // Re-throw the error to be caught by the calling function
   }
+}
+
+// Waitlist Types
+export interface WaitlistItem {
+  id: number;
+  user_id: number;
+  image_url: string;
+  try_on_url?: string;
+  status: 'pending' | 'processed';
+  created_at: string;
+}
+
+export interface WaitlistUploadResponse {
+  itemId: string;
+  message: string;
+}
+
+export interface TryOnRequest {
+  image_base64: string;
+  waitlist_item_id: number;
+}
+
+export interface TryOnResponse {
+  id: number;
+  image_url: string;
+  try_on_url: string;
+  status: 'pending' | 'processed';
+  user_id: number;
+  created_at: string;
+}
+
+export interface WaitlistUploadRequest {
+  image_base64: string;
+}
+
+// Waitlist API Functions
+export async function addItemToWaitlist(imageUrl: string): Promise<WaitlistUploadResponse> {
+  return apiCall<WaitlistUploadResponse>('/waitlist/items', {
+    method: 'POST',
+    body: JSON.stringify({ imageUrl }),
+  });
+}
+
+export async function uploadScreenshotToWaitlist(data: WaitlistUploadRequest): Promise<WaitlistUploadResponse> {
+  return apiCall<WaitlistUploadResponse>('/waitlist/upload-screenshot', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function tryOnWaitlistItem(data: TryOnRequest): Promise<TryOnResponse> {
+  return apiCall<TryOnResponse>(`/waitlist/try-on/${data.waitlist_item_id}`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getWaitlistItems(): Promise<WaitlistItem[]> {
+  return apiCall<WaitlistItem[]>('/waitlist/items', {
+    method: 'GET',
+  });
 }
