@@ -10,11 +10,12 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { Loader2 } from "lucide-react"
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const { login, isLoading } = useAuth()
+  const { login, isLoading, googleLogin } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -62,6 +63,21 @@ export default function LoginPage() {
               Log In
             </Button>
           </form>
+          <div className="my-4 flex items-center justify-center">
+            <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+              <GoogleLogin
+                onSuccess={async (credentialResponse) => {
+                  if (credentialResponse.credential) {
+                    await googleLogin(credentialResponse.credential)
+                  }
+                }}
+                onError={() => {
+                  // Можно добавить тост или обработку ошибки
+                }}
+                useOneTap
+              />
+            </GoogleOAuthProvider>
+          </div>
         </CardContent>
         <CardFooter className="text-sm">
           <p>

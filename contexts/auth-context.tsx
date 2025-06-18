@@ -14,6 +14,7 @@ interface AuthContextType {
   token: string | null
   login: (email_or_username: string, password: string) => Promise<boolean>
   register: (email: string, username: string, password: string) => Promise<boolean>
+  googleLogin: (id_token: string) => Promise<boolean>
   logout: () => void
   isLoading: boolean
   isAuthenticated: boolean
@@ -143,6 +144,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }
 
+  const googleLogin = async (id_token: string) => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/google-login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id_token }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        toast.error(`Google login failed: ${errorData.detail || response.statusText}`)
+        setIsLoading(false)
+        return false
+      }
+
+      const data: Token = await response.json()
+      Cookies.set("authToken", data.access_token, { expires: 7, secure: process.env.NODE_ENV === "production" })
+      setToken(data.access_token)
+      toast.success("Google login successful!")
+      setIsLoading(false)
+      router.push("/dashboard")
+      return true
+    } catch (error) {
+      console.error("Google login error:", error)
+      toast.error("Google login failed. Please try again.")
+      setIsLoading(false)
+      return false
+    }
+  }
+
   const logout = () => {
     Cookies.remove("authToken")
     localStorage.removeItem("authUser")
@@ -154,7 +188,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <AuthContext.Provider
-      value={{ user, token, login, register, logout, isLoading, isAuthenticated: !!token && !isLoading }}
+      value={{ user, token, login, register, googleLogin, logout, isLoading, isAuthenticated: !!token && !isLoading }}
     >
       {children}
     </AuthContext.Provider>

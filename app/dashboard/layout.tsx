@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import Sidebar from "@/components/dashboard/sidebar"
 import { Loader2 } from "lucide-react"
+import Link from "next/link"
 
 export default function DashboardLayout({
   children,
@@ -32,7 +33,15 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen bg-background text-foreground">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
+      <main className="flex-1 overflow-y-auto p-6 md:p-8">
+        <nav className="mb-4 flex gap-4">
+          <Link href="/dashboard/wardrobe">Гардероб</Link>
+          <Link href="/dashboard/chat">Чат</Link>
+          <Link href="/dashboard/waitlist">Waitlist</Link>
+          <Link href="/dashboard/tryon">Try-On</Link>
+        </nav>
+        {children}
+      </main>
     </div>
   )
 }
