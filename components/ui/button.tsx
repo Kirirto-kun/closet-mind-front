@@ -5,19 +5,20 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:scale-105 hover:shadow-lg active:scale-95",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground hover:from-primary/90 hover:to-primary/70 shadow-md hover:shadow-primary/20",
         destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+          "bg-gradient-to-r from-destructive to-red-400 text-destructive-foreground hover:from-destructive/90 hover:to-red-400/90 shadow-md hover:shadow-destructive/25",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-primary/20 bg-background/80 backdrop-blur-sm hover:bg-primary/5 hover:text-accent-foreground hover:border-primary/30",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-gradient-to-r from-secondary to-cream-100 text-secondary-foreground hover:from-secondary/80 hover:to-cream-100/80 shadow-sm",
+        ghost: "hover:bg-accent/50 hover:text-accent-foreground backdrop-blur-sm",
+        link: "text-primary underline-offset-4 hover:underline hover:text-primary/80",
+        nature: "bg-gradient-to-r from-nature-400 to-nature-500 text-white hover:from-nature-500 hover:to-nature-600 shadow-md hover:shadow-nature-500/25",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { Menu, X, Bot, MessageSquare, Shirt, ListChecks, LogOut, Download } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -13,10 +13,10 @@ import { cn } from "@/lib/utils"
 const API_BASE_URL = "https://www.closetmind.studio"
 
 const navItems = [
-  { href: "/dashboard/chat", label: "AI Chat", icon: MessageSquare },
-  { href: "/dashboard/tryon", label: "Try On", icon: Shirt },
-  { href: "/dashboard/wardrobe", label: "My Wardrobe", icon: Shirt },
-  { href: "/dashboard/waitlist", label: "My Waitlist", icon: ListChecks },
+  { href: "/dashboard/chat", label: "AI Чат", icon: MessageSquare },
+  { href: "/dashboard/tryon", label: "Примерка", icon: Shirt },
+  { href: "/dashboard/wardrobe", label: "Мой гардероб", icon: Shirt },
+  { href: "/dashboard/waitlist", label: "Список желаний", icon: ListChecks },
 ]
 
 export function MobileNav() {
@@ -42,15 +42,16 @@ export function MobileNav() {
           className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
           <Menu className="h-6 w-6" />
-          <span className="sr-only">Toggle Menu</span>
+          <span className="sr-only">Открыть меню</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="pr-0 w-[280px]">
+      <SheetContent side="left" className="pr-0 w-[280px] bg-background border-border">
+        <SheetTitle className="sr-only">Навигация по меню</SheetTitle>
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center space-x-2 px-6 py-4 border-b">
+          <div className="flex items-center space-x-2 px-6 py-4 border-b border-border">
             <Bot className="h-6 w-6 text-primary" />
-            <span className="text-lg font-semibold">ClosetMind</span>
+            <span className="text-lg font-semibold text-foreground">ClosetMind</span>
           </div>
 
           {/* Navigation */}
@@ -77,14 +78,14 @@ export function MobileNav() {
           </nav>
 
           {/* Footer Actions */}
-          <div className="px-4 py-6 border-t space-y-3">
+          <div className="px-4 py-6 border-t border-border space-y-3">
             <Button
               variant="outline"
               className="w-full justify-start text-left h-12"
               onClick={handleDownloadExtension}
             >
               <Download className="mr-3 h-5 w-5" />
-              Download Extension
+              Скачать расширение
             </Button>
             
             <div className="flex items-center gap-2">
@@ -94,14 +95,14 @@ export function MobileNav() {
                 onClick={handleLogout}
               >
                 <LogOut className="mr-3 h-5 w-5" />
-                Log Out
+                Выйти
               </Button>
               <ThemeToggle />
             </div>
 
             {user && (
-              <div className="text-xs text-muted-foreground text-center pt-2 border-t">
-                Logged in as {user.username || user.email}
+              <div className="text-xs text-muted-foreground text-center pt-2 border-t border-border">
+                Вошли как {user.username || user.email}
               </div>
             )}
           </div>

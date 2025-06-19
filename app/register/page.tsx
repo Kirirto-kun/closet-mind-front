@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
-import { Loader2, ArrowLeft } from "lucide-react"
+import { Loader2, ArrowLeft, Bot, Sparkles, Users } from "lucide-react"
 import { MobileHeader } from "@/components/ui/mobile-header"
+import { FloatingNatureElements, LargeNatureDecoration, NaturePattern } from "@/components/ui/nature-decorations"
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("")
@@ -26,32 +27,46 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <MobileHeader title="Sign Up" showNav={false} />
+    <div className="min-h-screen bg-nature-pattern relative">
+      <NaturePattern />
+      <FloatingNatureElements />
+      <LargeNatureDecoration position="top-right" />
+      <LargeNatureDecoration position="bottom-left" />
       
-      <div className="flex items-center justify-center min-h-[calc(100vh-3.5rem)] px-4 py-8">
-        <div className="w-full max-w-md space-y-6">
+      <MobileHeader title="Регистрация" showNav={false} />
+      
+      <div className="flex items-center justify-center min-h-[calc(100vh-3.5rem)] px-4 py-8 relative z-10">
+        <div className="w-full max-w-md space-y-6 animate-fade-in-up">
           {/* Back to home link - mobile friendly */}
           <div className="flex items-center">
-            <Button variant="ghost" size="sm" asChild className="p-0 h-auto">
-              <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" size="sm" asChild className="p-0 h-auto backdrop-blur-sm">
+              <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground transition-all duration-300">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to home
+                На главную
               </Link>
             </Button>
           </div>
 
-          <Card className="border-0 shadow-lg">
-            <CardHeader className="space-y-1 pb-6">
-              <CardTitle className="text-2xl font-bold text-center">Create an Account</CardTitle>
-              <CardDescription className="text-center text-base">
-                Join ClosetMind AI and revolutionize your style.
+          <Card className="border-0 shadow-2xl card-nature backdrop-blur-lg animate-scale-in" style={{ animationDelay: '0.2s' }}>
+            <CardHeader className="space-y-1 pb-6 text-center">
+              <div className="flex justify-center mb-4">
+                <div className="relative">
+                  <Users className="h-12 w-12 text-primary animate-gentle-bounce" />
+                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse-gentle"></div>
+                  <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-nature-400 animate-float" />
+                </div>
+              </div>
+              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
+                Создать аккаунт
+              </CardTitle>
+              <CardDescription className="text-center text-base text-muted-foreground">
+                Присоединяйтесь к ClosetMind AI и революционнационизируйте свой стиль.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-base">Email</Label>
+                  <Label htmlFor="email" className="text-base font-medium">Email</Label>
                   <Input
                     id="email"
                     type="email"
@@ -64,11 +79,11 @@ export default function RegisterPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="username" className="text-base">Username</Label>
+                  <Label htmlFor="username" className="text-base font-medium">Имя пользователя</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="your_username"
+                    placeholder="ваше_имя"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -77,7 +92,7 @@ export default function RegisterPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-base">Password</Label>
+                  <Label htmlFor="password" className="text-base font-medium">Пароль</Label>
                   <Input
                     id="password"
                     type="password"
@@ -97,19 +112,19 @@ export default function RegisterPage() {
                   {isSubmitting || isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creating account...
+                      Создаем аккаунт...
                     </>
                   ) : (
-                    "Sign Up"
+                    "Зарегистрироваться"
                   )}
                 </Button>
               </form>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4 pt-6">
               <div className="text-sm text-center">
-                <span className="text-muted-foreground">Already have an account? </span>
-                <Link href="/login" className="font-medium text-primary hover:underline">
-                  Log in
+                <span className="text-muted-foreground">Уже есть аккаунт? </span>
+                <Link href="/login" className="font-medium text-primary hover:underline transition-colors duration-300 hover:text-primary/80">
+                  Войти
                 </Link>
               </div>
             </CardFooter>

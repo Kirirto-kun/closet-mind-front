@@ -23,6 +23,8 @@ interface TryOn {
 export default function TryOnPage() {
   const [clothingFile, setClothingFile] = useState<File | null>(null);
   const [humanFile, setHumanFile] = useState<File | null>(null);
+  const [clothingFilePreview, setClothingFilePreview] = useState<string | null>(null);
+  const [humanFilePreview, setHumanFilePreview] = useState<string | null>(null);
   const [tryons, setTryons] = useState<TryOn[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +32,26 @@ export default function TryOnPage() {
   const { token, isAuthenticated, isLoading } = useAuth();
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!humanFile) {
+      setHumanFilePreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(humanFile);
+    setHumanFilePreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [humanFile]);
+
+  useEffect(() => {
+    if (!clothingFile) {
+      setClothingFilePreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(clothingFile);
+    setClothingFilePreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [clothingFile]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -93,34 +115,44 @@ export default function TryOnPage() {
       
       <Card className="p-4 md:p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="human" className="text-base">Фото человека</Label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="human" className="text-base font-medium">Фото человека</Label>
+              {humanFilePreview && (
+                <div className="aspect-square rounded-lg overflow-hidden border">
+                  <img src={humanFilePreview} alt="Предпросмотр фото человека" className="w-full h-full object-cover" />
+                </div>
+              )}
               <Input
                 id="human"
                 type="file"
                 accept="image/*"
                 onChange={e => setHumanFile(e.target.files?.[0] || null)}
                 required
-                className="h-12 text-base"
+                className="file:text-primary file:font-semibold"
               />
             </div>
-            <div>
-              <Label htmlFor="clothing" className="text-base">Фото одежды</Label>
+            <div className="space-y-2">
+              <Label htmlFor="clothing" className="text-base font-medium">Фото одежды</Label>
+              {clothingFilePreview && (
+                <div className="aspect-square rounded-lg overflow-hidden border">
+                  <img src={clothingFilePreview} alt="Предпросмотр фото одежды" className="w-full h-full object-cover" />
+                </div>
+              )}
               <Input
                 id="clothing"
                 type="file"
                 accept="image/*"
                 onChange={e => setClothingFile(e.target.files?.[0] || null)}
                 required
-                className="h-12 text-base"
+                className="file:text-primary file:font-semibold"
               />
             </div>
           </div>
           
           <Button 
             type="submit" 
-            disabled={loading}
+            disabled={loading || !clothingFile || !humanFile}
             className="w-full md:w-auto h-12 text-base"
           >
             {loading ? (

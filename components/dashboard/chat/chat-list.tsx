@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 import { PlusCircle, MessageSquare, Trash2, Loader2 } from "lucide-react"
 import type { Chat } from "@/lib/types"
 import { toast } from "sonner"
+import { cn } from "@/lib/utils"
 
 interface ChatListProps {
   chats: Chat[]
@@ -55,8 +56,8 @@ export default function ChatList({
   }
 
   return (
-    <div className="w-full md:w-72 lg:w-80 border-r border-border flex flex-col bg-card/50 backdrop-blur supports-[backdrop-filter]:bg-card/30 h-full">
-      <div className="p-3 md:p-4 border-b border-border flex justify-between items-center bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="w-full md:w-72 lg:w-80 border-r border-border flex flex-col bg-card h-full">
+      <div className="p-3 md:p-4 border-b border-border flex justify-between items-center bg-background">
         <h2 className="text-base md:text-lg font-semibold">Разговоры</h2>
         <Button 
           size="icon" 
@@ -103,10 +104,14 @@ export default function ChatList({
         {!isLoadingChats && chats.length > 0 && (
           <div className="p-2 space-y-1">
             {chats.map((chat) => (
-              <Button
+              <div
                 key={chat.id}
-                variant={selectedChatId === chat.id ? "secondary" : "ghost"}
-                className="w-full justify-start h-auto py-2 md:py-3 px-2 md:px-3 group text-left"
+                className={cn(
+                  "w-full h-auto py-2 md:py-3 px-2 md:px-3 group text-left rounded-md cursor-pointer transition-colors flex items-center",
+                  selectedChatId === chat.id 
+                    ? "bg-secondary text-secondary-foreground" 
+                    : "hover:bg-accent hover:text-accent-foreground"
+                )}
                 onClick={() => onSelectChat(chat.id)}
               >
                 <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
@@ -125,7 +130,7 @@ export default function ChatList({
                   )}
                   <span className="sr-only">Delete Chat</span>
                 </Button>
-              </Button>
+              </div>
             ))}
           </div>
         )}

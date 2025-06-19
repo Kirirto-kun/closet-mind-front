@@ -24,13 +24,15 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark" // You can change this to "system" if preferred
-          enableSystem={true} // Explicitly true
+          defaultTheme="light" // Изменяю на светлую тему по умолчанию
+          enableSystem={true}
           disableTransitionOnChange
-          storageKey="closetmind-theme" // Using a specific storage key
+          storageKey="closetmind-theme"
         >
           <AuthProvider>
-            {children}
+            <div className="min-h-screen bg-nature-pattern">
+              {children}
+            </div>
             <Toaster />
           </AuthProvider>
         </ThemeProvider>
