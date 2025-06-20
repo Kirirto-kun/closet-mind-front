@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { FloatingNatureElements } from "@/components/ui/nature-decorations"
 
-const API_BASE_URL = "https://www.closetmind.studio"
+const API_BASE_URL = "http://localhost:8000"
 
 const navItems = [
   { href: "/dashboard/chat", label: "AI Чат", icon: MessageSquare },
