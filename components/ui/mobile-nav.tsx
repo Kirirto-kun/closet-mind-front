@@ -10,7 +10,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 
-const API_BASE_URL = "http://localhost:8000"
+const API_BASE_URL = "https://www.closetmind.studio"
 
 const navItems = [
   { href: "/dashboard/chat", label: "AI Чат", icon: MessageSquare },
