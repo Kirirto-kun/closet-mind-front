@@ -9,13 +9,13 @@ import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { FloatingNatureElements } from "@/components/ui/nature-decorations"
 
-const API_BASE_URL = "https://www.closetmind.studio"
+const API_BASE_URL = "http://localhost:8000"
 
 const navItems = [
-  { href: "/dashboard/chat", label: "AI Чат", icon: MessageSquare },
-  { href: "/dashboard/tryon", label: "Примерка", icon: Shirt },
-  { href: "/dashboard/wardrobe", label: "Мой гардероб", icon: Shirt },
-  { href: "/dashboard/waitlist", label: "Список желаний", icon: ListChecks },
+  { href: "/dashboard/chat", label: "AI Chat", icon: MessageSquare },
+  { href: "/dashboard/tryon", label: "Try-On", icon: Shirt },
+  { href: "/dashboard/wardrobe", label: "My Wardrobe", icon: Shirt },
+  { href: "/dashboard/waitlist", label: "Wishlist", icon: ListChecks },
 ]
 
 export default function Sidebar() {
@@ -33,10 +33,10 @@ export default function Sidebar() {
 
   return (
     <aside className="h-full w-full bg-sidebar/90 backdrop-blur-lg flex flex-col border-r border-sidebar-border/50 shadow-xl relative overflow-hidden">
-      {/* Декоративные элементы */}
+      {/* Decorative elements */}
       <FloatingNatureElements />
       
-      {/* Логотип */}
+      {/* Logo */}
       <Link href="/dashboard" className="p-6 pb-4 flex items-center space-x-3 hover:opacity-80 transition-all duration-300 group">
         <div className="relative">
           <Bot className="h-12 w-12 text-primary group-hover:scale-110 transition-transform duration-300" />
@@ -51,11 +51,11 @@ export default function Sidebar() {
         </div>
       </Link>
 
-      {/* Навигация */}
+      {/* Navigation */}
       <nav className="flex-grow px-6 space-y-3">
         <div className="mb-6">
           <h2 className="text-sm font-semibold text-sidebar-foreground/70 uppercase tracking-wider mb-4">
-            Навигация
+            Navigation
           </h2>
         </div>
         {navItems.map((item) => (
@@ -83,16 +83,8 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {/* Нижняя секция */}
+      {/* Bottom section */}
       <div className="p-6 space-y-4 border-t border-sidebar-border/30">
-        <Button
-          variant="outline"
-          className="w-full justify-start text-sidebar-foreground hover:text-sidebar-accent-foreground hover:bg-sidebar-accent/50 border-sidebar-border/50 transition-all duration-300 hover:scale-105 h-12"
-          onClick={handleDownloadExtension}
-        >
-          <Download className="mr-3 h-5 w-5" />
-          Скачать расширение
-        </Button>
         
         <div className="flex items-center gap-3">
           <Button
@@ -101,7 +93,7 @@ export default function Sidebar() {
             onClick={handleLogout}
           >
             <LogOut className="mr-3 h-5 w-5" />
-            Выйти
+            Sign Out
           </Button>
           <div className="bg-sidebar-accent/50 rounded-lg p-2">
             <ThemeToggle />
@@ -110,7 +102,7 @@ export default function Sidebar() {
         
         {user && (
           <div className="text-center p-4 bg-sidebar-accent/30 rounded-lg border border-sidebar-border/30">
-            <p className="text-xs text-sidebar-foreground/70 mb-2">Вошли как</p>
+            <p className="text-xs text-sidebar-foreground/70 mb-2">Signed in as</p>
             <p className="text-sm font-medium text-sidebar-foreground">
               {user.username || user.email}
             </p>

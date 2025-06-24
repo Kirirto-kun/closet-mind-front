@@ -47,7 +47,7 @@ export default function ChatList({
   return (
     <div className="w-full border-r border-border flex flex-col bg-card h-full">
       <div className="p-3 md:p-4 border-b border-border flex justify-between items-center bg-background">
-        <h2 className="text-base md:text-lg font-semibold">Разговоры</h2>
+        <h2 className="text-base md:text-lg font-semibold">Conversations</h2>
         <Button 
           size="icon" 
           variant="ghost" 
@@ -60,7 +60,7 @@ export default function ChatList({
           ) : (
             <PlusCircle className="h-4 w-4 md:h-5 md:w-5" />
           )}
-          <span className="sr-only">Новый чат</span>
+          <span className="sr-only">New chat</span>
         </Button>
       </div>
 
@@ -68,7 +68,7 @@ export default function ChatList({
         {isLoadingChats && (
           <div className="p-4 text-center text-muted-foreground">
             <Loader2 className="h-5 w-5 md:h-6 md:w-6 animate-spin mx-auto mb-2" />
-            <p className="text-sm">Загружаю чаты...</p>
+            <p className="text-sm">Loading chats...</p>
           </div>
         )}
 
@@ -78,13 +78,13 @@ export default function ChatList({
               <MessageSquare className="h-5 w-5 md:h-6 md:w-6 text-primary" />
             </div>
             <div>
-              <p className="mb-2 text-sm">Пока нет разговоров</p>
+              <p className="mb-2 text-sm">No conversations yet</p>
               <Button 
                 variant="link" 
                 className="p-0 h-auto text-primary text-sm" 
                 onClick={handleCreate}
               >
-                Создайте первый чат!
+                Create the first chat!
               </Button>
             </div>
           </div>

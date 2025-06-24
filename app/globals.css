@@ -12,7 +12,7 @@ body {
   }
 }
 
-/* Декоративные элементы */
+/* Decorative elements */
 @layer components {
   .leaf-decoration {
     position: relative;
@@ -47,7 +47,7 @@ body {
     box-shadow: 0 8px 32px rgba(46, 140, 73, 0.1);
   }
   .card-nature-dark {
-    background: rgba(34, 56, 43, 0.96); /* плотнее */
+    background: rgba(34, 56, 43, 0.96); /* denser */
     backdrop-filter: blur(18px);
     border: 1px solid rgba(46, 140, 73, 0.18);
     box-shadow: 0 8px 32px rgba(34, 56, 43, 0.18), 0 1px 0 rgba(255,255,255,0.02) inset;
@@ -64,49 +64,49 @@ body {
 
 @layer base {
   :root {
-    /* Основные цвета - с новым зеленым #2e8c49 */
-    --background: 46 77% 97%; /* Очень светлый бежевый */
-    --foreground: 156 22% 20%; /* Темно-зеленый для текста */
+    /* Primary colors - with new green #2e8c49 */
+    --background: 46 77% 97%; /* Very light beige */
+    --foreground: 156 22% 20%; /* Dark green for text */
     
-    /* Карточки и поповеры */
-    --card: 0 0% 100%; /* Чистый белый */
+    /* Cards and popovers */
+    --card: 0 0% 100%; /* Pure white */
     --card-foreground: 156 22% 20%;
     --popover: 0 0% 100%;
     --popover-foreground: 156 22% 20%;
     
-    /* Основные акценты - новый зеленый #2e8c49 */
+    /* Primary accents - new green #2e8c49 */
     --primary: 156 49% 36%; /* #2e8c49 */
     --primary-foreground: 0 0% 100%;
     
-    /* Вторичные цвета - мягкие пастельные */
-    --secondary: 46 87% 95%; /* Очень светлый бежевый */
+    /* Secondary colors - soft pastels */
+    --secondary: 46 87% 95%; /* Very light beige */
     --secondary-foreground: 156 22% 25%;
     
-    /* Приглушенные цвета */
-    --muted: 46 67% 92%; /* Светлый бежевый */
+    /* Muted colors */
+    --muted: 46 67% 92%; /* Light beige */
     --muted-foreground: 156 14% 50%;
     
-    /* Акцентные цвета - очень мягкие */
-    --accent: 156 49% 90%; /* Очень светлый зеленый на основе #2e8c49 */
+    /* Accent colors - very soft */
+    --accent: 156 49% 90%; /* Very light green based on #2e8c49 */
     --accent-foreground: 156 22% 25%;
     
-    /* Деструктивные действия - мягкий розовый */
+    /* Destructive actions - soft pink */
     --destructive: 0 65% 85%;
     --destructive-foreground: 0 45% 25%;
     
-    /* Границы и элементы ввода - более мягкие */
-    --border: 156 49% 85%; /* Светлые зеленоватые границы на основе #2e8c49 */
+    /* Borders and input elements - softer */
+    --border: 156 49% 85%; /* Light greenish borders based on #2e8c49 */
     --input: 156 49% 92%;
     --ring: 156 49% 36%;
     
-    /* Чарты - мягкие природные цвета */
+    /* Charts - soft natural colors */
     --chart-1: 156 49% 36%; /* #2e8c49 */
-    --chart-2: 46 87% 75%; /* Светло-бежевый */
-    --chart-3: 172 55% 78%; /* Светло-мятный */
-    --chart-4: 39 85% 82%; /* Светло-желтый */
-    --chart-5: 320 55% 82%; /* Светло-розовый */
+    --chart-2: 46 87% 75%; /* Light beige */
+    --chart-3: 172 55% 78%; /* Light mint */
+    --chart-4: 39 85% 82%; /* Light yellow */
+    --chart-5: 320 55% 82%; /* Light pink */
     
-    /* Боковая панель - более мягкие тона */
+    /* Sidebar - softer tones */
     --sidebar-background: 46 77% 98%;
     --sidebar-foreground: 156 22% 25%;
     --sidebar-primary: 156 49% 36%; /* #2e8c49 */
@@ -116,7 +116,7 @@ body {
     --sidebar-border: 156 49% 85%;
     --sidebar-ring: 156 49% 36%;
     
-    --radius: 12px; /* Увеличенный радиус для мягкости */
+    --radius: 12px; /* Increased radius for softness */
   }
   
   .dark {
@@ -128,27 +128,27 @@ body {
     --popover-foreground: 0 0% 98%;
     --primary: 156 49% 45%;
     --primary-foreground: 156 25% 8%;
-    --secondary: 156 15% 7%; /* еще темнее */
+    --secondary: 156 15% 7%; /* even darker */
     --secondary-foreground: 0 0% 98%;
-    --muted: 156 10% 7%; /* еще темнее */
-    --muted-foreground: 156 10% 70%; /* светлый, но не белый */
-    --accent: 156 15% 7%; /* еще темнее */
+    --muted: 156 10% 7%; /* even darker */
+    --muted-foreground: 156 10% 70%; /* light, but not white */
+    --accent: 156 15% 7%; /* even darker */
     --accent-foreground: 0 0% 98%;
     --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 98%;
-    --border: 156 15% 10%; /* еще темнее */
-    --input: 156 15% 10%; /* еще темнее */
+    --border: 156 15% 10%; /* even darker */
+    --input: 156 15% 10%; /* even darker */
     --ring: 156 49% 45%;
     --chart-1: 156 49% 45%;
     --chart-2: 46 87% 65%;
     --chart-3: 172 55% 68%;
     --chart-4: 39 85% 72%;
     --chart-5: 320 55% 72%;
-    --sidebar-background: 156 20% 7%; /* еще темнее */
+    --sidebar-background: 156 20% 7%; /* even darker */
     --sidebar-foreground: 0 0% 98%;
     --sidebar-primary: 156 49% 45%;
     --sidebar-primary-foreground: 156 25% 8%;
-    --sidebar-accent: 156 15% 7%; /* еще темнее */
+    --sidebar-accent: 156 15% 7%; /* even darker */
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 156 15% 10%;
     --sidebar-ring: 156 49% 45%;
@@ -164,12 +164,12 @@ body {
     transition: all 0.3s ease;
   }
   
-  /* Плавные переходы для всех интерактивных элементов */
+  /* Smooth transitions for all interactive elements */
   button, input, textarea, select {
     transition: all 0.2s ease;
   }
   
-  /* Улучшенная прокрутка */
+  /* Improved scrolling */
   ::-webkit-scrollbar {
     width: 8px;
   }

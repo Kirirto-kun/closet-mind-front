@@ -31,7 +31,7 @@ export default function AgentMessageRenderer({ content }: AgentMessageRendererPr
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <ShoppingBag className="w-4 h-4" />
-            <span>Найдено товаров: {result.products.length}</span>
+            <span>Products found: {result.products.length}</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {result.products.map((product, index) => (
@@ -48,7 +48,7 @@ export default function AgentMessageRenderer({ content }: AgentMessageRendererPr
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Shirt className="w-4 h-4" />
-            <span>Рекомендация образа</span>
+            <span>Outfit Recommendation</span>
           </div>
           <OutfitDisplay outfit={result} />
         </div>
@@ -61,7 +61,7 @@ export default function AgentMessageRenderer({ content }: AgentMessageRendererPr
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MessageCircle className="w-4 h-4" />
-            <span>Общий ответ</span>
+            <span>General Response</span>
           </div>
           <GeneralResponse result={result} />
         </div>
@@ -82,14 +82,14 @@ export default function AgentMessageRenderer({ content }: AgentMessageRendererPr
             <AlertTriangle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
             <div className="flex-1">
               <h4 className="font-medium text-sm text-destructive mb-2">
-                Ошибка обработки ответа
+                Error processing response
               </h4>
               <p className="text-sm text-muted-foreground">
-                Не удалось обработать ответ от агента. Попробуйте переформулировать вопрос.
+                Could not process the response from the agent. Try rephrasing your question.
               </p>
               <details className="mt-2">
                 <summary className="text-xs text-muted-foreground cursor-pointer">
-                  Подробности ошибки
+                  Error details
                 </summary>
                 <pre className="text-xs bg-muted p-2 rounded mt-1 overflow-auto">
                   {content}

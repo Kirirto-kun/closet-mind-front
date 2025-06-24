@@ -30,11 +30,11 @@ const LandingNavbar = () => {
           <div className="flex items-center space-x-2">
             <ThemeToggle />
             <Button variant="ghost" asChild className="hover:bg-accent/50 transition-all duration-300">
-              <Link href="/login">Войти</Link>
+              <Link href="/login">Sign In</Link>
             </Button>
             <Button asChild className="bg-gradient-to-r from-primary to-forest-500 hover:from-primary/90 hover:to-forest-500/90 shadow-lg hover:shadow-primary/25 transition-all duration-300">
               <Link href="/register">
-                Начать <ArrowRight className="ml-2 h-4 w-4" />
+                Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -50,16 +50,16 @@ const LandingFooter = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-muted-foreground">
         <div className="flex justify-center items-center space-x-2 mb-2">
           <Leaf className="h-4 w-4 text-forest-500 animate-leaf-dance" />
-          <p>&copy; {new Date().getFullYear()} ClosetMind AI. Все права защищены.</p>
+          <p>&copy; {new Date().getFullYear()} ClosetMind AI. All rights reserved.</p>
           <Leaf className="h-4 w-4 text-forest-500 animate-leaf-dance" style={{ animationDelay: '1s' }} />
         </div>
-        <p className="text-sm">Ваш персональный AI помощник по стилю.</p>
+        <p className="text-sm">Your personal AI style assistant.</p>
       </div>
     </footer>
   )
 }
 
-// Декоративный компонент с листьями
+// Decorative component with leaves
 const FloatingLeaves = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -86,21 +86,21 @@ export default function LandingPage() {
   const features = [
     {
       icon: <MessageSquare className="h-8 w-8 md:h-10 md:w-10 text-primary mb-3 md:mb-4" />,
-      title: "AI Чат-помощник",
+      title: "AI Chat Assistant",
       description:
-        "Получайте персональные советы по стилю, рекомендации нарядов и ответы на модные вопросы от нашего умного AI ассистента.",
+        "Get personalized style advice, outfit recommendations, and answers to fashion questions from our smart AI assistant.",
     },
     {
       icon: <Shirt className="h-8 w-8 md:h-10 md:w-10 text-primary mb-3 md:mb-4" />,
-      title: "Цифровой гардероб",
+      title: "Digital Wardrobe",
       description:
-        "Организуйте свою одежду в цифровом формате. Легко просматривайте, управляйте и получайте советы по лучшему использованию гардероба.",
+        "Organize your clothes digitally. Easily browse, manage, and get advice on how to make the most of your wardrobe.",
     },
     {
       icon: <ListChecks className="h-8 w-8 md:h-10 md:w-10 text-primary mb-3 md:mb-4" />,
-      title: "Умный список желаний",
+      title: "Smart Wishlist",
       description:
-        "Сохраняйте модные идеи откуда угодно. Загружайте скриншоты или добавляйте ссылки в список и позволяйте AI помочь с выбором.",
+        "Save fashion ideas from anywhere. Upload screenshots or add links to your list and let the AI help you choose.",
     },
   ]
 
@@ -120,26 +120,25 @@ export default function LandingPage() {
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse-gentle"></div>
               </div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6">
-                Революция стиля с{" "}
+                Style revolution with{" "}
                 <span className="text-primary block sm:inline bg-gradient-to-r from-primary to-forest-600 bg-clip-text text-transparent">
                   ClosetMind AI
                 </span>
               </h1>
               <p className="mt-4 md:mt-6 max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
-                Ваш персональный AI помощник по моде для умной организации гардероба, персональных рекомендаций нарядов
-                и легкого открытия стиля.
+                Your personal AI fashion assistant for smart wardrobe organization, personalized outfit recommendations, and easy style discovery.
               </p>
             </div>
             
             <div className="mt-8 md:mt-10 space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               <Button size="lg" asChild className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-6 h-12 md:h-auto bg-gradient-to-r from-primary to-forest-500 hover:from-primary/90 hover:to-forest-500/90 shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:scale-105">
                 <Link href="/register">
-                  Начать бесплатно <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
+                  Start for free <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
                 </Link>
               </Button>
               <Button variant="outline" size="lg" asChild className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-6 h-12 md:h-auto border-primary/30 hover:bg-primary/5 transition-all duration-300 hover:scale-105">
                 <Link href="/login">
-                  Войти
+                  Sign In
                 </Link>
               </Button>
             </div>
@@ -155,7 +154,7 @@ export default function LandingPage() {
                       <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse-gentle"></div>
                     </div>
                     <p className="text-muted-foreground text-sm md:text-base">
-                      Интерфейс AI Fashion помощника
+                      AI Fashion Assistant Interface
                     </p>
                   </div>
                 </div>
@@ -169,9 +168,9 @@ export default function LandingPage() {
           <div className="absolute inset-0 leaf-pattern opacity-20"></div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center mb-8 md:mb-12 lg:mb-16 animate-fade-in-up">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Почему ClosetMind AI?</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Why ClosetMind AI?</h2>
               <p className="mt-3 md:mt-4 max-w-xl mx-auto text-muted-foreground text-sm md:text-base">
-                Откройте умный способ управления стилем и сделайте моду простой.
+                Discover a smart way to manage your style and make fashion simple.
               </p>
             </div>
             <div className="grid gap-6 md:gap-8 md:grid-cols-3">
@@ -198,15 +197,15 @@ export default function LandingPage() {
           <div className="absolute inset-0 dots-pattern opacity-20"></div>
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <div className="animate-fade-in-up">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Готовы улучшить свою модную игру?</h2>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Ready to upgrade your fashion game?</h2>
               <p className="mt-3 md:mt-4 max-w-xl mx-auto text-muted-foreground text-sm md:text-base leading-relaxed">
-                Присоединяйтесь к ClosetMind AI уже сегодня и испытайте будущее персонального стиля. Начните бесплатно!
+                Join ClosetMind AI today and experience the future of personal style. Get started for free!
               </p>
             </div>
             <div className="mt-6 md:mt-8 space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               <Button size="lg" asChild className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8 py-3 md:py-6 h-12 md:h-auto bg-gradient-to-r from-primary to-forest-500 hover:from-primary/90 hover:to-forest-500/90 shadow-lg hover:shadow-primary/25 transition-all duration-300 hover:scale-105">
                 <Link href="/register">
-                  Зарегистрироваться <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
+                  Sign Up <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
                 </Link>
               </Button>
             </div>

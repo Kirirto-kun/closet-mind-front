@@ -58,31 +58,31 @@ export default function ChatMessageArea({
           <Sparkles className="h-8 w-8 md:h-12 md:w-12 text-primary" />
         </div>
         <div className="space-y-2 md:space-y-3 max-w-md">
-          <h2 className="text-lg md:text-xl font-semibold">Добро пожаловать в ClosetMind</h2>
+          <h2 className="text-lg md:text-xl font-semibold">Welcome to ClosetMind</h2>
           <p className="text-sm md:text-base text-muted-foreground">
-            Выберите существующий разговор или создайте новый, чтобы начать общение с AI-стилистом
+            Select an existing conversation or create a new one to start chatting with your AI stylist.
           </p>
         </div>
         <div className="mt-6 md:mt-8 grid grid-cols-1 gap-3 md:gap-4 max-w-lg w-full">
           <div className="p-3 md:p-4 rounded-lg border border-border/50 bg-card">
             <div className="text-xl md:text-2xl mb-2">🛍️</div>
-            <h3 className="font-medium text-sm md:text-base">Поиск товаров</h3>
+            <h3 className="font-medium text-sm md:text-base">Product Search</h3>
             <p className="text-xs md:text-sm text-muted-foreground mt-1">
-              Найти одежду в интернет-магазинах
+              Find clothes in online stores
             </p>
           </div>
           <div className="p-3 md:p-4 rounded-lg border border-border/50 bg-card">
             <div className="text-xl md:text-2xl mb-2">👗</div>
-            <h3 className="font-medium text-sm md:text-base">Стильные образы</h3>
+            <h3 className="font-medium text-sm md:text-base">Stylish Outfits</h3>
             <p className="text-xs md:text-sm text-muted-foreground mt-1">
-              Подбор нарядов из гардероба
+              Outfit suggestions from your wardrobe
             </p>
           </div>
           <div className="p-3 md:p-4 rounded-lg border border-border/50 bg-card">
             <div className="text-xl md:text-2xl mb-2">💬</div>
-            <h3 className="font-medium text-sm md:text-base">Модные советы</h3>
+            <h3 className="font-medium text-sm md:text-base">Fashion Advice</h3>
             <p className="text-xs md:text-sm text-muted-foreground mt-1">
-              Общие вопросы о стиле
+              General questions about style
             </p>
           </div>
         </div>
@@ -117,8 +117,8 @@ export default function ChatMessageArea({
               <Loader2 className="h-6 w-6 md:h-8 md:w-8 animate-spin text-primary" />
             </div>
             <div className="text-center">
-              <p className="text-muted-foreground text-sm md:text-base">Загружаю сообщения...</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">Это займет всего секунду</p>
+              <p className="text-muted-foreground text-sm md:text-base">Loading messages...</p>
+              <p className="text-xs text-muted-foreground/60 mt-1">This will only take a second</p>
             </div>
           </div>
         )}
@@ -129,23 +129,23 @@ export default function ChatMessageArea({
               <Sparkles className="w-8 h-8 md:w-12 md:h-12 text-primary" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-base md:text-lg font-semibold">Привет! Я ваш AI-стилист</h3>
+              <h3 className="text-base md:text-lg font-semibold">Hi! I'm your AI stylist</h3>
               <p className="text-sm md:text-base text-muted-foreground max-w-md">
-                Могу помочь найти одежду, подобрать образ или просто поболтать о моде. 
-                Задайте любой вопрос!
+                I can help you find clothes, put together an outfit, or just chat about fashion. 
+                Ask any question!
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 max-w-lg w-full">
               <div className="p-2 md:p-3 rounded-lg border border-border/50 bg-muted/30">
-                <h4 className="font-medium text-xs md:text-sm mb-1">🛍️ Поиск товаров</h4>
+                <h4 className="font-medium text-xs md:text-sm mb-1">🛍️ Product Search</h4>
                 <p className="text-xs text-muted-foreground">
-                  "Найди черные джинсы"
+                  "Find black jeans"
                 </p>
               </div>
               <div className="p-2 md:p-3 rounded-lg border border-border/50 bg-muted/30">
-                <h4 className="font-medium text-xs md:text-sm mb-1">👗 Образы</h4>
+                <h4 className="font-medium text-xs md:text-sm mb-1">👗 Outfits</h4>
                 <p className="text-xs text-muted-foreground">
-                  "Что надеть на работу?"
+                  "What to wear to work?"
                 </p>
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function ChatMessageArea({
                 <div className="bg-muted p-3 md:p-4 rounded-2xl rounded-tl-md shadow-sm">
                   <div className="flex items-center space-x-2">
                     <Loader2 className="h-3 w-3 md:h-4 md:w-4 animate-spin text-primary" />
-                    <span className="text-xs md:text-sm text-muted-foreground">Обрабатываю ваш запрос...</span>
+                    <span className="text-xs md:text-sm text-muted-foreground">Processing your request...</span>
                   </div>
                 </div>
               </div>
@@ -210,7 +210,7 @@ export default function ChatMessageArea({
           <div className="flex-1 relative">
             <Input
               type="text"
-              placeholder="Спросите о товарах, образах или просто поболтайте..."
+              placeholder="Ask about products, outfits, or just chat..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={isSendingMessage || isLoadingMessages}
@@ -235,21 +235,21 @@ export default function ChatMessageArea({
             {isSendingMessage ? (
               <Loader2 className="h-4 w-4 md:h-4 md:w-4 animate-spin" />
             ) : (
-              <Send className="h-4 w-4 md:h-4 md:w-4" />
+              <Send className="h-4 w-4 md:h-4 md:h-4" />
             )}
-            <span className="sr-only">Отправить</span>
+            <span className="sr-only">Send</span>
           </Button>
         </form>
         
         {messages.length === 0 && !isLoadingMessages && (
           <div className="mt-3 md:mt-4 space-y-2">
-            <p className="text-xs text-muted-foreground">Попробуйте спросить:</p>
+            <p className="text-xs text-muted-foreground">Try asking:</p>
             <div className="flex flex-wrap gap-1 md:gap-2">
               {[
-                "Найди мне черную футболку",
-                "Что надеть на свидание?",
-                "Подбери образ для работы",
-                "Покажи зимние куртки"
+                "Find me a black t-shirt",
+                "What to wear on a date?",
+                "Put together an outfit for work",
+                "Show me winter jackets"
               ].map((suggestion) => (
                 <Button
                   key={suggestion}

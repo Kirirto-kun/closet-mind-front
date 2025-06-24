@@ -34,7 +34,7 @@ export default function RegisterPage() {
       <LargeNatureDecoration position="top-right" />
       <LargeNatureDecoration position="bottom-left" />
       
-      <MobileHeader title="Регистрация" showNav={false} />
+      <MobileHeader title="Register" showNav={false} />
       
       <div className="flex items-center justify-center min-h-[calc(100vh-3.5rem)] px-4 py-8 relative z-10">
         <div className="w-full max-w-md space-y-6 animate-fade-in-up">
@@ -43,7 +43,7 @@ export default function RegisterPage() {
             <Button variant="ghost" size="sm" asChild className="p-0 h-auto backdrop-blur-sm">
               <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground transition-all duration-300">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                На главную
+                Back to Home
               </Link>
             </Button>
           </div>
@@ -58,10 +58,10 @@ export default function RegisterPage() {
                 </div>
               </div>
               <CardTitle className="text-2xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
-                Создать аккаунт
+                Create an account
               </CardTitle>
               <CardDescription className="text-center text-base text-muted-foreground">
-                Присоединяйтесь к ClosetMind AI и революционнационизируйте свой стиль.
+                Join ClosetMind AI and revolutionize your style.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -80,11 +80,11 @@ export default function RegisterPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="username" className="text-base font-medium">Имя пользователя</Label>
+                  <Label htmlFor="username" className="text-base font-medium">Username</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="ваше_имя"
+                    placeholder="your_name"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -93,7 +93,7 @@ export default function RegisterPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-base font-medium">Пароль</Label>
+                  <Label htmlFor="password" className="text-base font-medium">Password</Label>
                   <Input
                     id="password"
                     type="password"
@@ -113,10 +113,10 @@ export default function RegisterPage() {
                   {isSubmitting || isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Создаем аккаунт...
+                      Creating account...
                     </>
                   ) : (
-                    "Зарегистрироваться"
+                    "Register"
                   )}
                 </Button>
               </form>
@@ -127,7 +127,7 @@ export default function RegisterPage() {
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-card/80 px-3 py-1 text-muted-foreground backdrop-blur-sm rounded-full">
-                    Или продолжить с
+                    Or continue with
                   </span>
                 </div>
               </div>
@@ -154,9 +154,9 @@ export default function RegisterPage() {
             </CardContent>
             <CardFooter className="flex flex-col space-y-4 pt-6">
               <div className="text-sm text-center">
-                <span className="text-muted-foreground">Уже есть аккаунт? </span>
+                <span className="text-muted-foreground">Already have an account? </span>
                 <Link href="/login" className="font-medium text-primary hover:underline transition-colors duration-300 hover:text-primary/80">
-                  Войти
+                  Sign in
                 </Link>
               </div>
             </CardFooter>

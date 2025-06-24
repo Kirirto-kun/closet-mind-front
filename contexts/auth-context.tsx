@@ -7,7 +7,7 @@ import Cookies from "js-cookie"
 import type { UserResponse, Token } from "@/lib/types" // We'll define these types later
 import { toast } from "sonner" // Using sonner for toasts
 
-const API_BASE_URL = "https://www.closetmind.studio"
+const API_BASE_URL = "http://localhost:8000"
 
 interface AuthContextType {
   user: UserResponse | null
@@ -28,7 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [token, setToken] = useState<string | null>(null)
   const router = useRouter()
 
-  // Инициализация только один раз при монтировании
+  // Initialize only once on mount
   useEffect(() => {
     const initAuth = () => {
       const currentToken = Cookies.get("authToken")
@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     initAuth()
-  }, []) // Только при монтировании
+  }, []) // Only on mount
 
   const login = async (email_or_username: string, password: string) => {
     setIsLoading(true)

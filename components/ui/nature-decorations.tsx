@@ -1,6 +1,6 @@
 import React from 'react'
 
-// SVG компонент листочка
+// Leaf SVG component
 export const LeafSVG = ({ className = "", ...props }: React.SVGProps<SVGSVGElement>) => (
   <svg
     viewBox="0 0 24 24"
@@ -12,7 +12,7 @@ export const LeafSVG = ({ className = "", ...props }: React.SVGProps<SVGSVGEleme
   </svg>
 )
 
-// SVG компонент цветочка
+// Flower SVG component
 export const FlowerSVG = ({ className = "", ...props }: React.SVGProps<SVGSVGElement>) => (
   <svg
     viewBox="0 0 24 24"
@@ -25,11 +25,11 @@ export const FlowerSVG = ({ className = "", ...props }: React.SVGProps<SVGSVGEle
   </svg>
 )
 
-// Компонент с плавающими декорациями
+// Component with floating decorations
 export const FloatingNatureElements = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Листочки */}
+      {/* Leaves */}
       <div className="absolute top-20 left-16 animate-float">
         <LeafSVG className="h-5 w-5 text-forest-500 opacity-60" />
       </div>
@@ -49,7 +49,7 @@ export const FloatingNatureElements = () => {
         <FlowerSVG className="h-3 w-3 text-forest-600 opacity-50" />
       </div>
       
-      {/* Кружочки и точки */}
+      {/* Circles and dots */}
       <div className="absolute top-32 right-1/3 w-2 h-2 bg-forest-500 rounded-full opacity-40 animate-pulse-gentle"></div>
       <div className="absolute bottom-48 left-1/4 w-3 h-3 bg-cream-300 rounded-full opacity-50 animate-pulse-gentle" style={{ animationDelay: '1s' }}></div>
       <div className="absolute top-1/2 left-12 w-1 h-1 bg-forest-400 rounded-full opacity-60 animate-pulse-gentle" style={{ animationDelay: '0.6s' }}></div>
@@ -58,7 +58,7 @@ export const FloatingNatureElements = () => {
   )
 }
 
-// Компонент для больших декоративных элементов
+// Component for large decorative elements
 export const LargeNatureDecoration = ({ position = "top-right" }: { position?: "top-right" | "bottom-left" | "center" }) => {
   const positionClasses = {
     "top-right": "top-8 right-8",
@@ -78,7 +78,7 @@ export const LargeNatureDecoration = ({ position = "top-right" }: { position?: "
   )
 }
 
-// Компонент паттерна из точек и листьев
+// Component for a pattern of dots and leaves
 export const NaturePattern = ({ className = "" }: { className?: string }) => {
   return (
     <div className={`absolute inset-0 ${className}`}>

@@ -33,7 +33,7 @@ export default function LoginPage() {
       <LargeNatureDecoration position="top-right" />
       <LargeNatureDecoration position="bottom-left" />
       
-      <MobileHeader title="Войти" showNav={false} />
+      <MobileHeader title="Sign In" showNav={false} />
       
       <div className="flex items-center justify-center min-h-[calc(100vh-3.5rem)] px-4 py-8 relative z-10">
         <div className="w-full max-w-md space-y-6 animate-fade-in-up">
@@ -42,7 +42,7 @@ export default function LoginPage() {
             <Button variant="ghost" size="sm" asChild className="p-0 h-auto backdrop-blur-sm">
               <Link href="/" className="flex items-center text-muted-foreground hover:text-foreground transition-all duration-300">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                На главную
+                Back to Home
               </Link>
             </Button>
           </div>
@@ -57,20 +57,20 @@ export default function LoginPage() {
                 </div>
               </div>
               <CardTitle className="text-2xl font-bold bg-gradient-to-r from-foreground to-primary bg-clip-text text-transparent">
-                С возвращением!
+                Welcome back!
               </CardTitle>
               <CardDescription className="text-center text-base text-muted-foreground">
-                Войдите, чтобы получить доступ к вашему AI помощнику по стилю.
+                Sign in to access your AI style assistant.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-base font-medium">Email или имя пользователя</Label>
+                  <Label htmlFor="email" className="text-base font-medium">Email or username</Label>
                   <Input
                     id="email"
                     type="text"
-                    placeholder="you@example.com или ваше_имя"
+                    placeholder="you@example.com or your_name"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -79,7 +79,7 @@ export default function LoginPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-base font-medium">Пароль</Label>
+                  <Label htmlFor="password" className="text-base font-medium">Password</Label>
                   <Input
                     id="password"
                     type="password"
@@ -99,10 +99,10 @@ export default function LoginPage() {
                   {isSubmitting || isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Входим...
+                      Signing in...
                     </>
                   ) : (
-                    "Войти"
+                    "Sign In"
                   )}
                 </Button>
               </form>
@@ -113,7 +113,7 @@ export default function LoginPage() {
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-card/80 px-3 py-1 text-muted-foreground backdrop-blur-sm rounded-full">
-                    Или продолжить с
+                    Or continue with
                   </span>
                 </div>
               </div>
@@ -140,9 +140,9 @@ export default function LoginPage() {
             </CardContent>
             <CardFooter className="flex flex-col space-y-4 pt-6">
               <div className="text-sm text-center">
-                <span className="text-muted-foreground">Нет аккаунта? </span>
+                <span className="text-muted-foreground">Don't have an account? </span>
                 <Link href="/register" className="font-medium text-primary hover:underline transition-colors duration-300 hover:text-primary/80">
-                  Зарегистрироваться
+                  Sign up
                 </Link>
               </div>
             </CardFooter>

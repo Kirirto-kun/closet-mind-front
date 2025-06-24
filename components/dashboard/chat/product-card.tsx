@@ -46,7 +46,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           size="sm"
         >
           <ShoppingCart className="w-3 h-3 md:w-4 md:h-4 mr-2" />
-          Перейти в магазин
+          Go to store
           <ExternalLink className="w-3 h-3 md:w-4 md:h-4 ml-2" />
         </Button>
       </CardFooter>

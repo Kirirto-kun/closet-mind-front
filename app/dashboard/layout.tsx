@@ -52,7 +52,7 @@ export default function DashboardLayout({
           </div>
           <div className="flex items-center justify-center space-x-2">
             <Leaf className="h-4 w-4 text-forest-500 animate-leaf-dance" />
-            <p className="text-muted-foreground">Загружаем ваш стильный мир...</p>
+            <p className="text-muted-foreground">Loading your stylish world...</p>
             <Leaf className="h-4 w-4 text-forest-500 animate-leaf-dance" style={{ animationDelay: '0.5s' }} />
           </div>
         </div>
@@ -62,7 +62,7 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Декоративные элементы только для светлой темы */}
+      {/* Decorative elements for light theme only */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none dark:hidden">
         <div className="absolute top-10 right-20 animate-float">
           <Leaf className="h-5 w-5 text-forest-300 opacity-40" />

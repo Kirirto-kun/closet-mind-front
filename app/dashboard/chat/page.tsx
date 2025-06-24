@@ -87,7 +87,7 @@ export default function ChatPage() {
     const draftId = -Date.now()
     const draftChat: Chat = {
       id: draftId,
-      title: "Новый чат",
+      title: "New Chat",
       user_id: 0,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

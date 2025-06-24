@@ -10,13 +10,13 @@ import { useAuth } from "@/contexts/auth-context"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 
-const API_BASE_URL = "https://www.closetmind.studio"
+const API_BASE_URL = "http://localhost:8000"
 
 const navItems = [
-  { href: "/dashboard/chat", label: "AI Чат", icon: MessageSquare },
-  { href: "/dashboard/tryon", label: "Примерка", icon: Shirt },
-  { href: "/dashboard/wardrobe", label: "Мой гардероб", icon: Shirt },
-  { href: "/dashboard/waitlist", label: "Список желаний", icon: ListChecks },
+  { href: "/dashboard/chat", label: "AI Chat", icon: MessageSquare },
+  { href: "/dashboard/tryon", label: "Try-On", icon: Shirt },
+  { href: "/dashboard/wardrobe", label: "My Wardrobe", icon: Shirt },
+  { href: "/dashboard/waitlist", label: "Wishlist", icon: ListChecks },
 ]
 
 export function MobileNav() {
@@ -42,11 +42,11 @@ export function MobileNav() {
           className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
           <Menu className="h-6 w-6" />
-          <span className="sr-only">Открыть меню</span>
+          <span className="sr-only">Open menu</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="pr-0 w-[280px] bg-background border-border">
-        <SheetTitle className="sr-only">Навигация по меню</SheetTitle>
+        <SheetTitle className="sr-only">Menu Navigation</SheetTitle>
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center space-x-2 px-6 py-4 border-b border-border">
@@ -79,14 +79,6 @@ export function MobileNav() {
 
           {/* Footer Actions */}
           <div className="px-4 py-6 border-t border-border space-y-3">
-            <Button
-              variant="outline"
-              className="w-full justify-start text-left h-12"
-              onClick={handleDownloadExtension}
-            >
-              <Download className="mr-3 h-5 w-5" />
-              Скачать расширение
-            </Button>
             
             <div className="flex items-center gap-2">
               <Button
@@ -95,14 +87,14 @@ export function MobileNav() {
                 onClick={handleLogout}
               >
                 <LogOut className="mr-3 h-5 w-5" />
-                Выйти
+                Sign Out
               </Button>
               <ThemeToggle />
             </div>
 
             {user && (
               <div className="text-xs text-muted-foreground text-center pt-2 border-t border-border">
-                Вошли как {user.username || user.email}
+                Signed in as {user.username || user.email}
               </div>
             )}
           </div>
