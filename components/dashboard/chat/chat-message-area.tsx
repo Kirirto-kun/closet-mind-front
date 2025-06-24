@@ -91,8 +91,8 @@ export default function ChatMessageArea({
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full">
-      <header className="p-3 md:p-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div className="relative flex flex-col h-full">
+      <header className="flex-shrink-0 p-3 md:p-4 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2 md:space-x-3 min-w-0">
             <div className="p-1.5 md:p-2 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex-shrink-0">
@@ -205,7 +205,7 @@ export default function ChatMessageArea({
         )}
       </ScrollArea>
 
-      <footer className="p-3 md:p-4 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <footer className="flex-shrink-0 p-3 md:p-4 border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <form onSubmit={handleSubmit} className="flex items-end space-x-2 md:space-x-3">
           <div className="flex-1 relative">
             <Input

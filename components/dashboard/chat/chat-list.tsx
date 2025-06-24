@@ -45,7 +45,7 @@ export default function ChatList({
   }
 
   return (
-    <div className="w-full md:w-72 lg:w-80 border-r border-border flex flex-col bg-card h-full">
+    <div className="w-full border-r border-border flex flex-col bg-card h-full">
       <div className="p-3 md:p-4 border-b border-border flex justify-between items-center bg-background">
         <h2 className="text-base md:text-lg font-semibold">Разговоры</h2>
         <Button 
@@ -96,19 +96,21 @@ export default function ChatList({
               <div
                 key={chat.id}
                 className={cn(
-                  "w-full h-auto py-2 md:py-3 px-2 md:px-3 group text-left rounded-md cursor-pointer transition-colors flex items-center",
-                  selectedChatId === chat.id 
-                    ? "bg-secondary text-secondary-foreground" 
+                  "w-full h-auto py-2 md:py-3 px-2 md:px-3 text-left rounded-md cursor-pointer transition-colors flex items-center justify-between gap-2",
+                  selectedChatId === chat.id
+                    ? "bg-secondary text-secondary-foreground"
                     : "hover:bg-accent hover:text-accent-foreground"
                 )}
                 onClick={() => onSelectChat(chat.id)}
               >
-                <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span className="truncate flex-1 text-sm md:text-base">{chat.title}</span>
+                <div className="flex items-center min-w-0">
+                  <MessageSquare className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <span className="truncate text-sm md:text-base flex-1 md:flex-none md:max-w-[200px]">{chat.title}</span>
+                </div>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-6 w-6 md:h-7 md:w-7 ml-2 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                  className="h-6 w-6 md:h-7 md:w-7 ml-2"
                   onClick={(e) => handleDelete(chat.id, e)}
                   disabled={isDeletingChat.has(chat.id)}
                 >

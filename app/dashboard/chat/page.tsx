@@ -279,7 +279,7 @@ export default function ChatPage() {
         </div>
 
         {/* Desktop - Chat Area */}
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full min-h-0">
         <ChatMessageArea
           selectedChat={selectedChat}
           messages={messages}

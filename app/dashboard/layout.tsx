@@ -72,30 +72,30 @@ export default function DashboardLayout({
         </div>
       </div>
 
-      <div className="md:flex md:h-screen">
+      <div className="flex h-screen">
         {/* Sidebar for Desktop */}
-        <div className="hidden md:block w-80 flex-shrink-0 animate-fade-in-up">
+        <aside className="hidden md:block w-72 flex-shrink-0 border-r border-border bg-card">
           <Sidebar />
-        </div>
+        </aside>
 
-        <div className="flex-1 flex flex-col">
-      {/* Mobile Header */}
-      <div className="md:hidden">
-        <MobileHeader />
-      </div>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Mobile Header */}
+          <div className="md:hidden">
+            <MobileHeader />
+          </div>
 
-          {/* Main Content Area */}
           <main className={cn(
-            "flex-grow",
-            isChatPage ? "md:h-screen" : "p-4 md:p-8"
+            "flex-1 overflow-y-auto",
+            isChatPage ? "" : "p-4 sm:p-6 lg:p-8"
           )}>
             <div className={cn(
-              isChatPage ? "h-full" : "bg-card border border-border rounded-lg p-4 md:p-6 min-h-full shadow-sm"
+              isChatPage ? "h-full" : "bg-card border border-border rounded-xl p-4 md:p-6 shadow-sm min-h-full"
             )}>
               {children}
             </div>
           </main>
-          </div>
+        </div>
       </div>
     </div>
   )
