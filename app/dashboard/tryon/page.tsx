@@ -9,7 +9,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Loader2, AlertTriangle, Trash } from "lucide-react";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://www.closetmind.studio";
 
 interface TryOn {
   id: number;
