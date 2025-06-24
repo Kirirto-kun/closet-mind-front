@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Loader2, AlertTriangle, ImageUp, ListChecks } from "lucide-react"
-import { getWaitlistItems } from "@/lib/api"
+import { getWaitlistItems, apiCall } from "@/lib/api"
 import type { WaitlistItem } from "@/lib/api"
 import UploadScreenshotDialog from "./UploadScreenshotDialog"
 import WaitlistItemCard from "./WaitlistItemCard"
+import { toast } from "sonner"
 
 export default function WaitlistContainer() {
   const [items, setItems] = useState<WaitlistItem[]>([])
@@ -34,6 +35,24 @@ export default function WaitlistContainer() {
 
   const handleItemAdded = () => {
     fetchItems()
+  }
+
+  const handleDeleteItem = async (itemId: number) => {
+    const originalItems = [...items]
+    setItems(currentItems => currentItems.filter(item => item.id !== itemId))
+    setError(null)
+
+    try {
+      await apiCall(`/waitlist/items/${itemId}`, {
+        method: 'DELETE',
+      })
+      toast.success("Item deleted from waitlist.")
+    } catch (err) {
+      setError("Failed to delete item. Please try again.")
+      setItems(originalItems)
+      console.error(err)
+      toast.error("Failed to delete item from waitlist.")
+    }
   }
 
   return (
@@ -86,7 +105,12 @@ export default function WaitlistContainer() {
       {!isLoading && !error && items.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
           {items.map((item) => (
-            <WaitlistItemCard key={item.id} item={item} onTryOnComplete={fetchItems} />
+            <WaitlistItemCard
+              key={item.id}
+              item={item}
+              onTryOnComplete={fetchItems}
+              onDelete={handleDeleteItem}
+            />
           ))}
         </div>
       )}

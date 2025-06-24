@@ -1,13 +1,9 @@
 "use client"
-import type React from "react"
-import { useState } from "react"
+import React from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog"
 import { PlusCircle, MessageSquare, Trash2, Loader2 } from "lucide-react"
 import type { Chat } from "@/lib/types"
-import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 
 interface ChatListProps {
@@ -31,18 +27,11 @@ export default function ChatList({
   isCreatingChat,
   isDeletingChat,
 }: ChatListProps) {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
-  const [newChatTitle, setNewChatTitle] = useState("")
+  // State for create action not needed anymore
 
-  const handleCreateChat = async () => {
-    if (!newChatTitle.trim()) {
-      toast.error("Chat title cannot be empty.")
-      return
-    }
-    const createdChat = await onCreateChat(newChatTitle)
+  const handleCreate = async () => {
+    const createdChat = await onCreateChat("")
     if (createdChat) {
-      setNewChatTitle("")
-      setIsCreateDialogOpen(false)
       onSelectChat(createdChat.id)
     }
   }
@@ -62,7 +51,7 @@ export default function ChatList({
         <Button 
           size="icon" 
           variant="ghost" 
-          onClick={() => setIsCreateDialogOpen(true)} 
+          onClick={handleCreate} 
           disabled={isCreatingChat}
           className="hover:bg-primary/10 hover:text-primary transition-colors h-8 w-8 md:h-10 md:w-10"
         >
@@ -93,7 +82,7 @@ export default function ChatList({
               <Button 
                 variant="link" 
                 className="p-0 h-auto text-primary text-sm" 
-                onClick={() => setIsCreateDialogOpen(true)}
+                onClick={handleCreate}
               >
                 Создайте первый чат!
               </Button>
@@ -135,38 +124,6 @@ export default function ChatList({
           </div>
         )}
       </ScrollArea>
-
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="w-[95vw] max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-lg">Создать новый чат</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <Input
-              placeholder="Введите название чата (например, Образы на выходные)"
-              value={newChatTitle}
-              onChange={(e) => setNewChatTitle(e.target.value)}
-              disabled={isCreatingChat}
-              className="h-12 text-base"
-            />
-          </div>
-          <DialogFooter className="flex-col sm:flex-row gap-2">
-            <DialogClose asChild>
-              <Button variant="outline" disabled={isCreatingChat} className="w-full sm:w-auto">
-                Отмена
-              </Button>
-            </DialogClose>
-            <Button 
-              onClick={handleCreateChat} 
-              disabled={isCreatingChat || !newChatTitle.trim()}
-              className="w-full sm:w-auto"
-            >
-              {isCreatingChat && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Создать чат
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   )
 }

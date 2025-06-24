@@ -2,25 +2,45 @@
 
 import type React from "react"
 import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { Loader2, Leaf } from "lucide-react"
 import { MobileHeader } from "@/components/ui/mobile-header"
 import Sidebar from "@/components/dashboard/sidebar"
+import { cn } from "@/lib/utils"
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { isAuthenticated, isLoading, token } = useAuth()
+  const { isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
+
+  const isChatPage = pathname === "/dashboard/chat"
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       router.replace("/login")
     }
   }, [isAuthenticated, isLoading, router])
+  
+  useEffect(() => {
+    const handleResize = () => {
+      if (isChatPage && window.innerWidth < 768) {
+        document.body.classList.add("overflow-hidden")
+      } else {
+        document.body.classList.remove("overflow-hidden")
+      }
+    }
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => {
+      window.removeEventListener("resize", handleResize)
+      document.body.classList.remove("overflow-hidden")
+    }
+  }, [isChatPage])
 
   if (isLoading || !isAuthenticated) {
     return (
@@ -52,34 +72,30 @@ export default function DashboardLayout({
         </div>
       </div>
 
+      <div className="md:flex md:h-screen">
+        {/* Sidebar for Desktop */}
+        <div className="hidden md:block w-80 flex-shrink-0 animate-fade-in-up">
+          <Sidebar />
+        </div>
+
+        <div className="flex-1 flex flex-col">
       {/* Mobile Header */}
       <div className="md:hidden">
         <MobileHeader />
       </div>
 
-      {/* Desktop Layout - сайдбар на всю левую часть */}
-      <div className="hidden md:flex h-screen bg-background text-foreground">
-        {/* Desktop Sidebar - занимает всю левую часть */}
-        <div className="w-80 flex-shrink-0 animate-fade-in-up">
-          <Sidebar />
-        </div>
-        {/* Основной контент */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <div className="bg-card border border-border rounded-lg p-6 min-h-full shadow-sm">
-            {children}
-          </div>
-        </main>
-      </div>
-
-      {/* Mobile Layout */}
-      <div className="md:hidden">
-        <main className="pt-14 min-h-[calc(100vh-3.5rem)] bg-background">
-          <div className="p-4">
-            <div className="bg-card border border-border rounded-lg p-4 shadow-sm">
+          {/* Main Content Area */}
+          <main className={cn(
+            "flex-grow",
+            isChatPage ? "md:h-screen" : "p-4 md:p-8"
+          )}>
+            <div className={cn(
+              isChatPage ? "h-full" : "bg-card border border-border rounded-lg p-4 md:p-6 min-h-full shadow-sm"
+            )}>
               {children}
             </div>
+          </main>
           </div>
-        </main>
       </div>
     </div>
   )

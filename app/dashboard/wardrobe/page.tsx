@@ -60,6 +60,22 @@ export default function WardrobePage() {
     fetchItems()
   }
 
+  const handleDeleteItem = async (itemId: number) => {
+    const originalItems = [...items]
+    setItems(currentItems => currentItems.filter(item => item.id !== itemId))
+    setError(null)
+
+    try {
+      await apiCall(`/wardrobe/items/${itemId}`, {
+        method: 'DELETE',
+      })
+    } catch (err) {
+      setError("Failed to delete item. Please try again.")
+      setItems(originalItems)
+      console.error(err)
+    }
+  }
+
   const categoryOrder = useMemo(() => {
     const order = Object.keys(groupedItems).sort((a, b) => {
       if (a === UNCATEGORIZED_KEY) return 1
@@ -136,7 +152,7 @@ export default function WardrobePage() {
               <AccordionContent className="px-3 md:px-4 pt-0 pb-4">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4 pt-2">
                   {groupedItems[category].map((item) => (
-                    <WardrobeItemCard key={item.id} item={item} />
+                    <WardrobeItemCard key={item.id} item={item} onDelete={handleDeleteItem} />
                   ))}
                 </div>
               </AccordionContent>

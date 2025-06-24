@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { Loader2, ArrowLeft, Bot, Sparkles, Users } from "lucide-react"
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
 import { MobileHeader } from "@/components/ui/mobile-header"
 import { FloatingNatureElements, LargeNatureDecoration, NaturePattern } from "@/components/ui/nature-decorations"
 
@@ -16,7 +17,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const { register, isLoading } = useAuth()
+  const { register, isLoading, googleLogin } = useAuth()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,7 +28,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-nature-pattern relative">
+    <div className="min-h-screen relative bg-gradient-to-br from-cream-50 via-nature-50 to-cream-100 dark:from-background dark:via-background dark:to-muted">
       <NaturePattern />
       <FloatingNatureElements />
       <LargeNatureDecoration position="top-right" />
@@ -63,7 +64,7 @@ export default function RegisterPage() {
                 Присоединяйтесь к ClosetMind AI и революционнационизируйте свой стиль.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6">
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-base font-medium">Email</Label>
@@ -119,6 +120,37 @@ export default function RegisterPage() {
                   )}
                 </Button>
               </form>
+              
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-border/50" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card/80 px-3 py-1 text-muted-foreground backdrop-blur-sm rounded-full">
+                    Или продолжить с
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex justify-center">
+                <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
+                  <div className="w-full">
+                    <GoogleLogin
+                      onSuccess={async (credentialResponse) => {
+                        if (credentialResponse.credential) {
+                          await googleLogin(credentialResponse.credential)
+                        }
+                      }}
+                      onError={() => {
+                        // Error handling
+                      }}
+                      useOneTap={false}
+                      size="large"
+                      width="100%"
+                    />
+                  </div>
+                </GoogleOAuthProvider>
+              </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4 pt-6">
               <div className="text-sm text-center">

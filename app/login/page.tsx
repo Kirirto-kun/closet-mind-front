@@ -27,7 +27,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-nature-pattern relative">
+    <div className="min-h-screen relative bg-gradient-to-br from-cream-50 via-nature-50 to-cream-100 dark:from-background dark:via-background dark:to-muted">
       <NaturePattern />
       <FloatingNatureElements />
       <LargeNatureDecoration position="top-right" />

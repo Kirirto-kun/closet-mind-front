@@ -6,7 +6,6 @@ import type {
   ChatWithMessages,
   ChatMessageResponse,
   UIMessage,
-  CreateChatPayload,
   SendMessagePayload,
 } from "@/lib/types"
 import ChatList from "@/components/dashboard/chat/chat-list"
@@ -83,30 +82,22 @@ export default function ChatPage() {
     [chats],
   )
 
-  const handleCreateChat = async (title: string): Promise<Chat | null> => {
+  const handleCreateChat = async (_unused: string): Promise<Chat | null> => {
     setIsCreatingChat(true)
-    try {
-      const payload: CreateChatPayload = { title }
-      console.log("Creating chat with payload:", payload)
-      const newChat = await apiCall<Chat>("/api/v1/chats/", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      })
-      console.log("Created new chat:", newChat)
-      setChats((prev) =>
-        [newChat, ...prev].sort(
-          (a, b) => new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime(),
-        ),
-      )
-      toast.success(`Chat "${newChat.title}" created!`)
-      return newChat
-    } catch (error) {
-      toast.error("Failed to create chat.")
-      console.error("Create chat error:", error)
-      return null
-    } finally {
-      setIsCreatingChat(false)
+    const draftId = -Date.now()
+    const draftChat: Chat = {
+      id: draftId,
+      title: "Новый чат",
+      user_id: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     }
+    setChats((prev) => [draftChat, ...prev])
+    setSelectedChat(draftChat)
+    setMessages([])
+    setShowChatList(false)
+    setIsCreatingChat(false)
+    return draftChat
   }
 
   const handleDeleteChat = async (chatId: number): Promise<boolean> => {
@@ -139,10 +130,7 @@ export default function ChatPage() {
   }
 
   const handleSendMessage = async (chatId: number, messageContent: string) => {
-    if (!selectedChat || selectedChat.id !== chatId) {
-      console.warn("handleSendMessage called with mismatched chatId or no selected chat.")
-      return
-    }
+    if (!selectedChat) return;
 
     const optimisticUserMessage: UIMessage = {
       id: `optimistic-${Date.now()}`,
@@ -153,43 +141,67 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, optimisticUserMessage])
     setIsSendingMessage(true)
 
-    const endpoint = `/api/v1/chats/${chatId}/messages`
-    const payload: SendMessagePayload = { message: messageContent }
-    console.log(`Attempting to send message to ${endpoint} with payload:`, payload)
+    // If chat is draft (negative id), use init endpoint
+    const isDraft = selectedChat.id < 0
 
     try {
-      const assistantResponse = await apiCall<ChatMessageResponse>(endpoint, {
-        method: "POST",
-        body: JSON.stringify(payload),
-      })
-      console.log("Received assistant response:", assistantResponse)
+      if (isDraft) {
+        const endpoint = `/api/v1/chats/init`
+        const payload: SendMessagePayload = { message: messageContent }
+        const chatWithMessages = await apiCall<any>(endpoint, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        })
 
-      const newAssistantMessage: UIMessage = {
-        id: assistantResponse.id,
-        role: assistantResponse.role,
-        content: assistantResponse.content,
-        createdAt: assistantResponse.created_at,
-      }
+        const { id, title, user_id, created_at, updated_at, messages: serverMessages } = chatWithMessages
 
-      setMessages((prevMessages) => {
-        const updatedMessages = prevMessages.filter((m) => m.id !== optimisticUserMessage.id)
-        return [...updatedMessages, optimisticUserMessage, newAssistantMessage].sort(
-          (a, b) => new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime(),
+        // Convert server messages to UIMessage[]
+        const uiMsgs: UIMessage[] = serverMessages.map((m: any) => ({
+          id: m.id,
+          role: m.role,
+          content: m.content,
+          createdAt: m.created_at,
+        }))
+
+        const newChat: Chat = { id, title, user_id, created_at, updated_at }
+
+        // Replace draft chat in list
+        setChats((prev) => {
+          const withoutDraft = prev.filter((c) => c.id !== selectedChat.id)
+          return [newChat, ...withoutDraft]
+        })
+        setSelectedChat(newChat)
+        setMessages(uiMsgs)
+      } else {
+        // Existing chat
+        const endpoint = `/api/v1/chats/${chatId}/messages`
+        const payload: SendMessagePayload = { message: messageContent }
+        const assistantResponse = await apiCall<ChatMessageResponse>(endpoint, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        })
+
+        const newAssistantMessage: UIMessage = {
+          id: assistantResponse.id,
+          role: assistantResponse.role,
+          content: assistantResponse.content,
+          createdAt: assistantResponse.created_at,
+        }
+
+        setMessages((prevMessages) => [...prevMessages, newAssistantMessage])
+
+        // Update chats order
+        setChats((prevChats) =>
+          prevChats
+            .map((c) => (c.id === chatId ? { ...c, updated_at: newAssistantMessage.createdAt || new Date().toISOString() } : c))
+            .sort(
+              (a, b) =>
+                new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime(),
+            ),
         )
-      })
-
-      setChats((prevChats) =>
-        prevChats
-          .map((c) =>
-            c.id === chatId ? { ...c, updated_at: newAssistantMessage.createdAt || new Date().toISOString() } : c,
-          )
-          .sort(
-            (a, b) =>
-              new Date(b.updated_at || b.created_at).getTime() - new Date(a.updated_at || a.created_at).getTime(),
-          ),
-      )
+      }
     } catch (error) {
-      console.error(`Send message error for chat ${chatId}:`, error)
+      console.error("Send message error:", error)
       setMessages((prev) => prev.filter((m) => m.id !== optimisticUserMessage.id))
     } finally {
       setIsSendingMessage(false)
@@ -237,7 +249,7 @@ export default function ChatPage() {
                 {selectedChat?.title || "Chat"}
               </h1>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 overflow-y-auto">
               <ChatMessageArea
                 selectedChat={selectedChat}
                 messages={messages}
@@ -251,7 +263,9 @@ export default function ChatPage() {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden md:flex h-[calc(100vh-4rem)] lg:h-[calc(100vh-5rem)] border border-border rounded-lg shadow-xl overflow-hidden">
+      <div className="hidden md:grid md:grid-cols-[320px_1fr] h-[calc(100vh-3.5rem)]">
+        {/* Desktop - Chat List */}
+        <div className="border-r h-full overflow-y-auto">
         <ChatList
           chats={chats}
           selectedChatId={selectedChat?.id || null}
@@ -262,6 +276,10 @@ export default function ChatPage() {
           isCreatingChat={isCreatingChat}
           isDeletingChat={isDeletingChat}
         />
+        </div>
+
+        {/* Desktop - Chat Area */}
+        <div className="flex flex-col h-full">
         <ChatMessageArea
           selectedChat={selectedChat}
           messages={messages}
@@ -269,6 +287,7 @@ export default function ChatPage() {
           isLoadingMessages={isLoadingMessages}
           isSendingMessage={isSendingMessage}
         />
+        </div>
       </div>
     </>
   )

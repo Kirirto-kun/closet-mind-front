@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Loader2, AlertTriangle } from "lucide-react";
+import { Loader2, AlertTriangle, Trash } from "lucide-react";
 
 const API_BASE_URL = "https://www.closetmind.studio";
 
@@ -32,6 +32,11 @@ export default function TryOnPage() {
   const { token, isAuthenticated, isLoading } = useAuth();
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const openImageDialog = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setOpen(true);
+  };
 
   useEffect(() => {
     if (!humanFile) {
@@ -109,6 +114,30 @@ export default function TryOnPage() {
     }
   };
 
+  const handleDelete = async (tryonId: number) => {
+    if (!token) return;
+
+    const originalTryons = tryons;
+    setTryons(tryons.filter((tryon) => tryon.id !== tryonId));
+    setError(null);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/tryon/${tryonId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Ошибка удаления try-on");
+      }
+    } catch (e: any) {
+      setError(e.message);
+      setTryons(originalTryons);
+    }
+  };
+
   return (
     <div className="space-y-6 md:space-y-8">
       <h1 className="text-2xl md:text-3xl font-bold">Try-On: примерка одежды</h1>
@@ -119,8 +148,11 @@ export default function TryOnPage() {
             <div className="space-y-2">
               <Label htmlFor="human" className="text-base font-medium">Фото человека</Label>
               {humanFilePreview && (
-                <div className="aspect-square rounded-lg overflow-hidden border">
-                  <img src={humanFilePreview} alt="Предпросмотр фото человека" className="w-full h-full object-cover" />
+                <div 
+                  className="aspect-square rounded-lg overflow-hidden border cursor-pointer"
+                  onClick={() => openImageDialog(humanFilePreview)}
+                >
+                  <img src={humanFilePreview} alt="Предпросмотр фото человека" className="w-full h-full object-cover transition hover:scale-105" />
                 </div>
               )}
               <Input
@@ -135,8 +167,11 @@ export default function TryOnPage() {
             <div className="space-y-2">
               <Label htmlFor="clothing" className="text-base font-medium">Фото одежды</Label>
               {clothingFilePreview && (
-                <div className="aspect-square rounded-lg overflow-hidden border">
-                  <img src={clothingFilePreview} alt="Предпросмотр фото одежды" className="w-full h-full object-cover" />
+                <div 
+                  className="aspect-square rounded-lg overflow-hidden border cursor-pointer"
+                  onClick={() => openImageDialog(clothingFilePreview)}
+                >
+                  <img src={clothingFilePreview} alt="Предпросмотр фото одежды" className="w-full h-full object-cover transition hover:scale-105" />
                 </div>
               )}
               <Input
@@ -193,12 +228,14 @@ export default function TryOnPage() {
                 <img 
                   src={tryon.human_image_url} 
                   alt="Человек" 
-                  className="w-20 h-20 md:w-24 md:h-24 object-cover rounded border" 
+                  className="w-20 h-20 md:w-24 md:h-24 object-cover rounded border cursor-pointer transition hover:scale-105"
+                  onClick={() => openImageDialog(tryon.human_image_url)}
                 />
                 <img 
                   src={tryon.clothing_image_url} 
                   alt="Одежда" 
-                  className="w-20 h-20 md:w-24 md:h-24 object-cover rounded border" 
+                  className="w-20 h-20 md:w-24 md:h-24 object-cover rounded border cursor-pointer transition hover:scale-105"
+                  onClick={() => openImageDialog(tryon.clothing_image_url)}
                 />
               </div>
               
@@ -207,15 +244,22 @@ export default function TryOnPage() {
                   src={tryon.result_url}
                   alt="Результат"
                   className="w-32 h-32 md:w-40 md:h-40 object-cover rounded border cursor-pointer transition hover:scale-105"
-                  onClick={() => {
-                    setSelectedImage(tryon.result_url);
-                    setOpen(true);
-                  }}
+                  onClick={() => openImageDialog(tryon.result_url)}
                 />
               </div>
               
-              <div className="text-xs text-muted-foreground text-center">
+              <div className="flex items-center justify-between pt-2">
+                <div className="text-xs text-muted-foreground">
                 {new Date(tryon.created_at).toLocaleString()}
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleDelete(tryon.id)}
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  <Trash className="w-4 h-4" />
+                </Button>
               </div>
             </Card>
           ))}

@@ -1,14 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Image from "next/image"
 import type { ClothingItemResponse } from "@/lib/types"
-import { Tag } from "lucide-react"
+import { Tag, Trash } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface WardrobeItemCardProps {
   item: ClothingItemResponse
+  onDelete: (itemId: number) => void
 }
 
-export default function WardrobeItemCard({ item }: WardrobeItemCardProps) {
+export default function WardrobeItemCard({ item, onDelete }: WardrobeItemCardProps) {
   const placeholderImg = `/placeholder.svg?width=300&height=400&query=${encodeURIComponent(item.name || "clothing item")}`
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    onDelete(item.id)
+  }
 
   return (
     <Card className="overflow-hidden flex flex-col h-full hover:shadow-md transition-shadow">
@@ -23,6 +31,15 @@ export default function WardrobeItemCard({ item }: WardrobeItemCardProps) {
             ;(e.target as HTMLImageElement).src = placeholderImg
           }}
         />
+        <Button
+          onClick={handleDeleteClick}
+          variant="destructive"
+          size="icon"
+          className="absolute top-2 right-2 h-7 w-7 z-10"
+          aria-label="Delete item"
+        >
+          <Trash className="h-4 w-4" />
+        </Button>
       </CardHeader>
       <CardContent className="p-2 md:p-3 flex-grow">
         <CardTitle className="text-sm md:text-base font-semibold truncate mb-2" title={item.name}>
